@@ -10,7 +10,7 @@ License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.
 """
 
 
-
+from anki.lang import _
 import aqt
 from aqt.qt import *
 from aqt import mw
