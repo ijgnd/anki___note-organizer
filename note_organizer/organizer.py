@@ -222,7 +222,7 @@ class Organizer(QDialog):
             nid = int(item.text())
         except ValueError:
             return False
-        timestamp = nid / 1000
+        timestamp = nid // 1000
         qtime = QDateTime()
         qtime.setTime_t(timestamp)
         self.f.date.setDateTime(qtime)
