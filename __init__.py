@@ -11,4 +11,4 @@ Copyright: (c) Glutanimate 2017
 License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.html
 """ 
 
-import note_organizer.main
+from .note_organizer import main
