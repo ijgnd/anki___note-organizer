@@ -14,8 +14,8 @@ from anki.errors import AnkiError
 from aqt import mw
 from aqt.utils import tooltip
 from anki.utils import intTime, ids2str
-from config import *
-from consts import *
+from .config import *
+from .consts import *
 
 class Rearranger:
     """Performs the actual database reorganization"""
@@ -58,11 +58,11 @@ class Rearranger:
         self.mw.col.reset()
         self.mw.reset()
 
-        tooltip(u"Reorganization complete:<br>"
-            u"<b>{}</b> note(s) <b>moved</b><br>"
-            u"<b>{}</b> note(s) <b>deleted</b><br>"
-            u"<b>{}</b> note(s) <b>created</b><br>"
-            u"<b>{}</b> note(s) <b>updated alongside</b><br>".format(
+        tooltip("Reorganization complete:<br>"
+            "<b>{}</b> note(s) <b>moved</b><br>"
+            "<b>{}</b> note(s) <b>deleted</b><br>"
+            "<b>{}</b> note(s) <b>created</b><br>"
+            "<b>{}</b> note(s) <b>updated alongside</b><br>".format(
                 len(moved), len(deleted), len(created), 
                 len(modified)-len(moved)),
             parent=self.browser)
@@ -163,11 +163,11 @@ class Rearranger:
                 continue
 
             print("------------------------------")
-            print("last", last)
-            print("current", nid)
-            print("next", nxt)
-            print("nextmoved", nxt in moved)
-            print("expected", last < nid < nxt)
+            print(("last", last))
+            print(("current", nid))
+            print(("next", nxt))
+            print(("nextmoved", nxt in moved))
+            print(("expected", last < nid < nxt))
             # check if order as expected
             if last != 0 and last < nid < nxt:
                 if nid in alterated and nxt in alterated:
@@ -205,7 +205,7 @@ class Rearranger:
             # keep track of moved nids (e.g. for dupes)
             self.nid_map[nid] = new_nid
             
-            print("new_nid", new_nid)
+            print(("new_nid", new_nid))
             nidlist.append(new_nid)
             last = new_nid
 
@@ -306,7 +306,7 @@ class Rearranger:
             new_nid += 1
 
         # Leave some room for future changes when possible
-        for i in xrange(20):
+        for i in range(20):
             new_nid += 1
             if self.noteExists(new_nid):
                 new_nid -= 1

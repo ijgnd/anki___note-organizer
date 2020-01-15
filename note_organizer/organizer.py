@@ -108,7 +108,7 @@ class Organizer(QDialog):
             else:
                 modifier = None
             if modifier:
-                hotkey = u"{}+{}".format(modifier, str((idx+1) % 10))
+                hotkey = "{}+{}".format(modifier, str((idx+1) % 10))
                 label = label + "\t" + hotkey
                 sc = QShortcut(QKeySequence(hotkey), 
                     self.table, activated=lambda a=model: self.onInsertNote(a))
@@ -276,7 +276,7 @@ class Organizer(QDialog):
         self.table.insertRow(row)
         if not model:
             model = MODEL_SAME
-        data = u"{}: {}".format(NEW_NOTE, model)
+        data = "{}: {}".format(NEW_NOTE, model)
         item = QTableWidgetItem(data)
         font = item.font()
         font.setBold(True)
@@ -302,7 +302,7 @@ class Organizer(QDialog):
                 if value.startswith(DEL_NOTE) or not nid:
                     self.table.removeRow(new_row)
                     return
-                data = u"{}: {}".format(marker, nid)
+                data = "{}: {}".format(marker, nid)
                 dupe = QTableWidgetItem(data)
                 font = dupe.font()
                 font.setBold(True)
@@ -320,7 +320,7 @@ class Organizer(QDialog):
         if not rows:
             return
         to_remove = []
-        delmark = u"{}: ".format(DEL_NOTE)
+        delmark = "{}: ".format(DEL_NOTE)
         for row in rows:
             item = self.table.item(row, 0)
             if not item:
@@ -333,13 +333,13 @@ class Organizer(QDialog):
             # Existing notes:
             if value.startswith(delmark): # remove deletion mark
                 new = value.replace(delmark, "")
-                item.setText(u"{}".format(new))
+                item.setText("{}".format(new))
                 font = item.font()
                 font.setBold(False)
                 item.setFont(font)
                 item.setForeground(QBrush())
             else: # apply deletion mark
-                item.setText(u"{}: {}".format(DEL_NOTE, value))
+                item.setText("{}: {}".format(DEL_NOTE, value))
                 font = item.font()
                 font.setBold(True)
                 item.setFont(font)
