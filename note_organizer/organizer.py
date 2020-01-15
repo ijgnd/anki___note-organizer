@@ -69,17 +69,17 @@ class Organizer(QDialog):
         self.table.setContextMenuPolicy(Qt.CustomContextMenu)
         self.table.customContextMenuRequested.connect(self.onTableContext)
 
-        s = QShortcut(QKeySequence(_(HOTKEY_INSERT)), 
+        s = QShortcut(QKeySequence(HOTKEY_INSERT),
                 self.table, activated=self.onInsertNote)
-        s = QShortcut(QKeySequence(_(HOTKEY_DUPE)), 
+        s = QShortcut(QKeySequence(HOTKEY_DUPE),
                 self.table, activated=self.onDuplicateNote)
-        s = QShortcut(QKeySequence(_(HOTKEY_DUPE_SCHED)), 
+        s = QShortcut(QKeySequence(HOTKEY_DUPE_SCHED),
                 self.table, activated=lambda: self.onDuplicateNote(sched=True))
-        s = QShortcut(QKeySequence(_(HOTKEY_REMOVE)), 
+        s = QShortcut(QKeySequence(HOTKEY_REMOVE),
                 self.table, activated=self.onRemoveNotes)
-        s = QShortcut(QKeySequence(_(HOTKEY_CUT)), 
+        s = QShortcut(QKeySequence(HOTKEY_CUT),
                 self.table, activated=self.onCutRow)
-        s = QShortcut(QKeySequence(_(HOTKEY_PASTE)), 
+        s = QShortcut(QKeySequence(HOTKEY_PASTE),
                 self.table, activated=self.onPasteRow)
 
         # Sets up context sub-menu and hotkeys for various note types
