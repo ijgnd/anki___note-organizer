@@ -196,8 +196,8 @@ class Organizer(QDialog):
             for col, value in enumerate(columns):
                 item = QTableWidgetItem(value)
                 f = QFont()
-                f.setFamily(b.mw.fontFamily)
-                f.setPixelSize(b.mw.fontHeight)
+                # f.setFamily(b.mw.fontFamily)
+                #f.setPixelSize(b.mw.fontHeight)
                 item.setFont(f)
                 t.setItem(row,col,item)
 
