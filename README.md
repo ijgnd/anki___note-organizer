@@ -22,14 +22,6 @@ Extends Anki's card browser with an easy-to-use dialog that provides the user wi
 
 [Link to the add-on on AnkiWeb]()
 
-*Manual installation*
-
-1. Go to *Tools* -> *Add-ons* -> *Open add-ons folder*
-2. Find and delete `Note Organizer.py` and `note_organizer`
-3. Download and extract the latest add-on release from the [releases tab](https://github.com/Glutanimate/note-organizer/releases)
-4. Move `Note Organizer.py` and `note_organizer` into the add-ons folder
-5. Restart Anki
-
 ### Documentation
 
 **Important Notes**
@@ -86,8 +78,10 @@ Clicking on "OK" will prompt you with a confirmation dialog, listing all of the 
 
 *Note Organizer* is *Copyright © 2017 [Aristotelis P.](https://github.com/Glutanimate)*
 
+Updated to anki 2.1 (python 3, qt5) © 2020 [Arthur Milchior](https://github.com/Arthur-Milchior/note-organizer)*
+
 This add-on was developed on a commission by a fellow Anki user who would like to remain anonymous. All credit for the original idea goes to them.
 
-I'm always happy for new add-on commissions. If you'd like to hire my services to work an add-on or new feature, please feel free to reach out to me through *ankiglutanimate [αt] gmail . com*.
+We are always happy for new add-on commissions. If you'd like to hire the services of one of us to work an add-on or new feature, please feel free to reach out to me through *ankiglutanimate [αt] gmail . com* or *arthur@milchior.fr*.
 
 Licensed under the [GNU AGPL v3](http://www.gnu.de/documents/gpl-3.0.en.html). 
