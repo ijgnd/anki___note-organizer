@@ -1,4 +1,4 @@
-## Note Organizer Add-on for Anki
+## ijgnd's fork of Arthur's Fork of Glutanimate's Note Organizer Add-on for Anki
 
 Extends Anki's card browser with an easy-to-use dialog that provides the user with a multitude of different ways to organize and restructure their note collection. Actions supported by the add-on include changing the note order, inserting new notes at specific positions, and the ability to duplicate notes alongside their scheduling.
 
