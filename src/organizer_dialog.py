@@ -191,7 +191,9 @@ class Organizer(QDialog):
         # set table data
         # start = timer()
         coldict = dict(b.columns)
-        headers = ["Note ID"] + [coldict[key] for key in mcol]
+        # after uninstall of advanced browser there are might be unknown columns in mcol like 
+        # my "overdueivl"
+        headers = ["Note ID"] + [coldict.get(key, "Add-on") for key in mcol]
         row_count = len(data)
         t.setRowCount(row_count)
         t.setColumnCount(len(headers))
