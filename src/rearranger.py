@@ -80,15 +80,15 @@ class Rearranger:
     def first_valid_nid_in_nids_list(self, nids):
         """Find valid nid in nids list"""
         """original name: findSample"""
-        sample = None
+        curr = None
         for nid in nids:
             try:
-                sample = int(nid)
-                if self.noteExists(sample):
+                curr = int(nid)
+                if self.noteExists(curr):
                     break
             except ValueError:
                 continue
-        return sample
+        return curr
 
 
     def processActions(self, nids):
