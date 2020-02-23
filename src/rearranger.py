@@ -13,8 +13,10 @@ from anki.errors import AnkiError
 from aqt import mw
 from aqt.utils import tooltip
 from anki.utils import intTime, ids2str
+
 from .config import gc
 from .consts import *
+from .helpers import fields_to_fill_for_nonempty_front_template
 
 class Rearranger:
     """Performs the actual database reorganization"""
@@ -260,8 +262,13 @@ class Rearranger:
         if not ntype: # dupe
             fields = sample.fields
         else:
-            # need to fill all fields to avoid notes without cards
-            fields = ["."] * len(new_note.fields)
+            # original solution: fill all fields to avoid notes without cards
+            #    fields = ["."] * len(new_note.fields)
+            # problem: That's a hassle for note types that generate e.g. up to 20 cards ...
+            # for details see helpers.py
+            fields = [""] * len(new_note.fields)
+            for i in fields_to_fill_for_nonempty_front_template(new_note.mid):
+                fields[i] = "."
         new_note.fields = fields
         if gc("BACKUP_FIELD") in new_note: # skip onid field
             new_note[gc("BACKUP_FIELD")] = ""
