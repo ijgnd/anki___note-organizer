@@ -7,6 +7,7 @@ License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.
 """
 
 import collections
+from pprint import pprint as pp
 import re
 
 from aqt import mw
