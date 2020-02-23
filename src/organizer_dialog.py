@@ -9,13 +9,19 @@ License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.
 """
 
 # from timeit import default_timer as timer
+from pprint import pprint as pp
 
 from anki.hooks import addHook, remHook
 
 from aqt.qt import *
-
-from aqt.utils import saveHeader, restoreHeader, saveGeom, \
-    restoreGeom, askUser, tooltip, askUser
+from aqt.utils import (
+    saveHeader, 
+    restoreHeader, 
+    saveGeom,
+    restoreGeom,
+    askUser,
+    tooltip
+)
 
 from .forms import organizer
 from .notetable import NoteTable
