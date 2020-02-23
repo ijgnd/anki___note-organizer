@@ -166,7 +166,7 @@ def onReviewerOrgMenu(command, offset):
     if gc("REVIEWER_OPEN_BROWSER"):
         browser = aqt.dialogs.open("Browser", mw)
         browser.form.searchEdit.lineEdit().setText(search)
-        browser.onSearch()
+        browser._onSearchActivated()
         rearranger.selectNotes(browser, res)
 
 
