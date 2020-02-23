@@ -75,8 +75,9 @@ class Rearranger:
         return(to_select)
 
 
-    def findSample(self, nids):
+    def first_valid_nid_in_nids_list(self, nids):
         """Find valid nid in nids list"""
+        """original name: findSample"""
         sample = None
         for nid in nids:
             try:
@@ -133,7 +134,7 @@ class Rearranger:
                     sched = action == DUPE_NOTE_SCHED
                 else:
                     ntype = "".join(data)
-                    sample = last or nxt or self.findSample(nids)
+                    sample = last or nxt or self.first_valid_nid_in_nids_list(nids)
                 if not sample or not self.noteExists(sample):
                     continue
                 nid = self.addNote(sample, ntype=ntype, sched=sched)
