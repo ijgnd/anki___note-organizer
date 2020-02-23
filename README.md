@@ -1,4 +1,16 @@
-## ijgnd's fork of Arthur's Fork of Glutanimate's Note Organizer Add-on for Anki
+## Ijgnd's Fork of Arthur's Fork of Glutanimate's Note Organizer Add-on for Anki
+
+This add-on is not well tested. It's alpha quality software. Only use it if you have backups and know how to restore them. Only use if after testing it on a disposable collection. This add-on makes far-reaching changes to your database. If there's a bug all your notes might be damaged.
+
+USE THIS AT YOUR OWN RISK!!
+
+Feedback and bug reports that describe how to produce the problem are very welcome. My goal is to get the code tested and working well so that I can send a pull request that glutanimate can merge and release.
+
+
+
+
+
+### (mostly the) Original description
 
 Extends Anki's card browser with an easy-to-use dialog that provides the user with a multitude of different ways to organize and restructure their note collection. Actions supported by the add-on include changing the note order, inserting new notes at specific positions, and the ability to duplicate notes alongside their scheduling.
 
@@ -18,9 +30,7 @@ Extends Anki's card browser with an easy-to-use dialog that provides the user wi
 
 ### Installation
 
-*AnkiWeb*
-
-[Link to the add-on on AnkiWeb]()
+Drag and Drop the .ankiaddon file into the add-on dialog. You can download from the .ankiaddon file from the [github releases page](https://github.com/ijgnd/anki21___note-organizer)
 
 ### Documentation
 
@@ -46,7 +56,7 @@ Gathering all of the required information to display your notes takes time, and 
 
 Contrary to what you might be thinking at this point, setting a custom note sorting order will *not* allow you to go through your regular reviews in a specific order. What it will provide you with, however, is:
 
-- the ability to review cards in a consistent sorting order using *filtered decks* or the [Advanced Previewer add-on](https://ankiweb.net/shared/info/544521385)
+- the ability to review cards in a consistent sorting order using *filtered decks* or the [Advanced Previewer add-on](https://ankiweb.net/shared/info/544521385). The Advanced Previewer does not work with Anki 2.1 as of 2020-02-22. But the add-on creator glutanimate has already announced an update.
 - the ability to freely determine how new cards are introduced in the learning phase
 - the ability to always go back and learn your cards in a specific order when starting from scratch after a longer hiatus
 - the ability to restructure your decks in preparation of sharing them with others
@@ -59,7 +69,7 @@ Aside from moving notes around, the add-on also allows you to:
 
 **General Use**
 
-From Anki's card browser, you can invoke the note organizer window by using the hotkey <kbd>Ctrl</kbd> + <kbd>G</kbd> or by clicking on the corresponding menu entry that the add-on supplies.
+From Anki's card browser, you can invoke the note organizer window by using the hotkey <kbd>Ctrl</kbd> + <kbd>G</kbd> (configurable) or by clicking on the corresponding menu entry that the add-on supplies.
 
 Using the note organizer is very easy: Most actions supported by the add-on are available through a context-menu which you can invoke by right-clicking on any of the entries in the note table. Corresponding hotkeys are listed next to the actions and allow you to also use the add-on with your keyboard.
 
@@ -73,15 +83,18 @@ The date and time entry at the bottom left corner allows you to set the creation
 
 Clicking on "OK" will prompt you with a confirmation dialog, listing all of the changes that the add-on will perform. Make sure to always double-check whether all of these are correct. The add-on *does* set a recovery point before performing its changes – which can then be reverted to through Anki's undo feature (<kbd>Ctrl</kbd> + <kbd>Z</kbd>) – but it's better to be safe than sorry.
 
-
 ### Credits and License
 
 *Note Organizer* is *Copyright © 2017 [Aristotelis P.](https://github.com/Glutanimate)*
 
 Updated to anki 2.1 (python 3, qt5) © 2020 [Arthur Milchior](https://github.com/Arthur-Milchior/note-organizer)*
 
+Small bug fixes and some reorganization/renaming © 2020 ijgnd
+
 This add-on was developed on a commission by a fellow Anki user who would like to remain anonymous. All credit for the original idea goes to them.
 
-We are always happy for new add-on commissions. If you'd like to hire the services of one of us to work an add-on or new feature, please feel free to reach out to me through *ankiglutanimate [αt] gmail . com* or *arthur@milchior.fr*.
+Glutanimate's version from 2017 includes this line: "I'm always happy for new add-on commissions. If you'd like to hire my services to work an add-on or new feature, please feel free to reach out to me through ankiglutanimate [αt] gmail . com." Since then he has stated a [patreon](https://www.patreon.com/glutanimate) so that he probably doesn't have time for new add-on commissions. There are multiple great supporters-only add-ons on his patreon.
+
+But in 2020-02 you can hire Arthur Milchior(*arthur@milchior.fr*) who has created about [70 add-ons](https://ankiweb.net/shared/byauthor/354407385) and also has done some paid work.
 
 Licensed under the [GNU AGPL v3](http://www.gnu.de/documents/gpl-3.0.en.html). 
