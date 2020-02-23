@@ -176,7 +176,7 @@ def onReviewerOrgMenu(command, offset):
             pass
         else:
             break
-    start = timestamp  # orgin deck has at least one note (=the note creating the card reviewed)
+    start = timestamp  # deck has at least one note (=the note creating the card reviewed)
     moved = []
 
     rearranger = Rearranger(card=card)
