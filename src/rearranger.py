@@ -26,20 +26,22 @@ class Rearranger:
     def __init__(self, browser=None, card=None):
         self.browser = browser
         self.mw = mw
-        self.card = card  # card is not None only when called from the reviewer context menu - onReviewerOrgMenu
+        self.card = card  # card is not None only when called from the reviewer 
+                          # context menu - onReviewerOrgMenu
         self.nid_map = {}  # in rearrange: self.nid_map[nid] = new_nid
 
 
-    def processNids(self, nids, start, moved, repos=False):
+    def processNids(self, all_rows_nids_raw, start, moved_nids, repos=False):
         """
         Main function
 
         Arguments:
 
-        - nids:  list, unprocessed note IDs as strings,
+        - all_rows_nids_raw:  list, unprocessed note IDs as strings,
                  including potential action prefixes
+                 all the nids that were in the gui window
         - start: int, creation date of first note (first row in dialog) as UNIX timestamp
-        - moved: list, nids that were interactively moved by the user
+        - moved_nids: list, nids that were interactively moved by the user
         - repos: boolean, whether to reposition due dates or not
         """
         
@@ -52,8 +54,8 @@ class Rearranger:
         # Create checkpoint
         self.mw.checkpoint("Reorganize notes")
 
-        nids, deleted, created = self.processActions(nids)
-        modified, nidlist = self.rearrange(nids, start, moved, created)
+        processed_nids, deleted_nids, created_nids = self.processActions(all_rows_nids_raw)
+        modified, nidlist = self.adjust_nid_order(processed_nids, start, moved_nids, created_nids)
 
         if repos:
             self.reposition(nidlist)
@@ -66,11 +68,11 @@ class Rearranger:
             "<b>{}</b> note(s) <b>deleted</b><br>"
             "<b>{}</b> note(s) <b>created</b><br>"
             "<b>{}</b> note(s) <b>updated alongside</b><br>".format(
-                len(moved), len(deleted), len(created), 
-                len(modified)-len(moved)),
+                len(moved_nids), len(deleted_nids), len(created_nids), 
+                len(modified)-len(moved_nids)),
             parent=self.browser)
 
-        to_select = moved + created
+        to_select = moved_nids + created_nids
         if self.browser:
             self.selectNotes(self.browser, to_select)
 
@@ -91,7 +93,7 @@ class Rearranger:
         return curr
 
 
-    def processActions(self, nids):
+    def processActions(self, all_rows_nids_raw):
         """
         Parse and execute actions in nid list (e.g. note creation)
         Also converts nids to ints
@@ -102,8 +104,9 @@ class Rearranger:
         deleted = []
         created = []
 
-        for idx, nid in enumerate(nids):
-            #if I insert a new note in the gui from the browser nid is "New: Same note type as previous"
+        for idx, nid in enumerate(all_rows_nids_raw):
+            # if I insert a new note in the gui from the browser nid is e.g. 
+            # "New: Same note type as previous"
             try:
                 # Regular NID, no action
                 processed.append(int(nid))
@@ -112,7 +115,7 @@ class Rearranger:
                 vals = nid.split(": ")
 
             try:
-                nxt = int(nids[idx+1])
+                nxt = int(all_rows_nids_raw[idx+1])
             except (IndexError, ValueError):
                 # last Index
                 nxt = None
@@ -132,11 +135,14 @@ class Rearranger:
                 sched = False
                 ntype = None
                 if action.startswith(DUPE_NOTE):
-                    neighboring_nid = int(data[0])  # dialog.onDuplicateNote: this is the nid of the note before the dupe (when the dupe was inserted)
+                    neighboring_nid = int(data[0])  # dialog.onDuplicateNote: this is the nid of 
+                                                    # the note BEFORE the dupe (when the dupe was 
+                                                    # inserted)
                     sched = action == DUPE_NOTE_SCHED
                 else:  # NEW_NOTE
                     ntype = "".join(data)
-                    neighboring_nid = nxt or self.first_valid_nid_in_nids_list(nids)  # next nid in dialog
+                    # for new notes nxt is the NEXT nid in dialog
+                    neighboring_nid = nxt or self.first_valid_nid_in_nids_list(all_rows_nids_raw)
                 if not neighboring_nid or not self.noteExists(neighboring_nid):
                     continue
                 nid = self.addNote(neighboring_nid, ntype=ntype, sched=sched)
@@ -227,33 +233,37 @@ class Rearranger:
         return new_note.id
 
 
-    def rearrange(self, nids, start, moved, created):
-        """Adjust nid order"""
+    def adjust_nid_order(self, processed_nids, start, moved_nids, created_nids):
+        """
+        original name: rearrange
+        only called from self.processNids
+
+        unchanged passed through in processNids
+        - start: int, creation date of first note (first row in dialog) as UNIX timestamp
+        - moved_nids: list, nids that were interactively moved by the user
+
+        """
         modified = []
         nidlist = []
-        alterated = moved + created
+        altered_nids = moved_nids + created_nids
         last = 0
 
-        for idx, nid in enumerate(nids):
+        for idx, nid in enumerate(processed_nids):
             try:
-                nxt = int(nids[idx+1])
+                nxt = int(processed_nids[idx+1])
             except (IndexError, ValueError):
                 nxt = nid + 1
 
             if not self.noteExists(nid): # note deleted
                 continue
-
-            print("------------------------------")
-            print(("last", last))
-            print(("current", nid))
-            print(("next", nxt))
-            print(("nextmoved", nxt in moved))
-            print(("expected", last < nid < nxt))
+ 
+            nmvd = "{}".format(nxt in moved_nids).ljust(5)
+            xpctd = "{}".format(last < nid < nxt).ljust(5)
+            print(f"___last:{last}, nid:{nid}, next:{nxt}, nextmoved:{nmvd}, expected:{xpctd}")
             # check if order as expected
             if last != 0 and last < nid < nxt:
-                if nid in alterated and nxt in alterated:
-                    print("moved block")
-                    pass
+                if nid in altered_nids and nxt in altered_nids:
+                    print("moved block")  # pass
                 else:
                     print("skipping")
                     last = nid
@@ -275,7 +285,7 @@ class Rearranger:
             
             new_nid = self.updateNidSafely(nid, new_nid)
 
-            if nid not in created:
+            if nid not in created_nids:
                 modified.append(new_nid)
                 idnote = False
             else:
