@@ -26,7 +26,7 @@ class Rearranger:
     def __init__(self, browser=None, card=None):
         self.browser = browser
         self.mw = mw
-        self.card = card
+        self.card = card  # card is not None only when called from the reviewer context menu - onReviewerOrgMenu
         self.nid_map = {}  # in rearrange: self.nid_map[nid] = new_nid
 
 
@@ -103,6 +103,7 @@ class Rearranger:
         created = []
 
         for idx, nid in enumerate(nids):
+            #if I insert a new note in the gui from the browser nid is "New: Same note type as previous"
             try:
                 # Regular NID, no action
                 processed.append(int(nid))
@@ -116,8 +117,8 @@ class Rearranger:
                 # last Index
                 nxt = None
 
-            action = vals[0]
-            data = vals[1:]
+            action = vals[0]  # e.g. "New" (=NEW_NOTE)
+            data = vals[1:]   # e.g. "Same note type as previous" (=MODEL_SAME)
             if action == DEL_NOTE:
                 # Actions: Delete
                 nnid = int(data[0])
@@ -131,14 +132,14 @@ class Rearranger:
                 sched = False
                 ntype = None
                 if action.startswith(DUPE_NOTE):
-                    sample = int(data[0])
+                    neighboring_nid = int(data[0])  # dialog.onDuplicateNote: this is the nid of the note before the dupe (when the dupe was inserted)
                     sched = action == DUPE_NOTE_SCHED
-                else:
+                else:  # NEW_NOTE
                     ntype = "".join(data)
-                    sample = nxt or self.first_valid_nid_in_nids_list(nids)
-                if not sample or not self.noteExists(sample):
+                    neighboring_nid = nxt or self.first_valid_nid_in_nids_list(nids)  # next nid in dialog
+                if not neighboring_nid or not self.noteExists(neighboring_nid):
                     continue
-                nid = self.addNote(sample, ntype=ntype, sched=sched)
+                nid = self.addNote(neighboring_nid, ntype=ntype, sched=sched)
                 if not nid:
                     continue
                 created.append(int(nid))
@@ -213,54 +214,59 @@ class Rearranger:
         return modified, nidlist
 
 
-    def addNote(self, sample_nid, ntype=None, sched=False):
-        """Create new note based on sample nid"""
-        sample_nid = self.nid_map.get(sample_nid, sample_nid)
-        sample = self.mw.col.getNote(sample_nid)
+    def addNote(self, neighbNid, ntype=None, sched=False):
+        """
+        Create new note based on a neighboring nid: This is used as the source note from which
+        the new note will inherit: 
+           - For empty new notes it seems to be the following note
+           - for dupes it seems to be the preceeding note
+        """
+        neighbNid = self.nid_map.get(neighbNid, neighbNid)
+        sourceNote = self.mw.col.getNote(neighbNid)
         
-        if not self.card:
-            cids = self.mw.col.db.list(
-                    "select id from cards where nid = ? order by ord", sample_nid)
+        if not self.card:   # self.card only if called from the reviewer - so this condition is True if called from the browser
+            sourceCids = self.mw.col.db.list(
+                    "select id from cards where nid = ? order by ord", neighbNid)
             try:
-                sample_cid = cids[0]
+                visible_source_cid = sourceCids[0]
             except IndexError:
                 # invalid state: note has no cards
                 return None
             
             # try to use visible card if available
             if self.browser:
-                for cid in cids:
+                for cid in sourceCids:
                     if cid in self.browser.model.cards:
-                        sample_cid = cid
+                        visible_source_cid = cid
                         break
             
-            sample_card = self.mw.col.getCard(sample_cid)
+            source_card = self.mw.col.getCard(visible_source_cid)
         else:
-            sample_card = self.card
+            source_card = self.card
         
         # gather model/deck information
-        sample_did = sample_card.odid or sample_card.did # account for dyn decks
-        sample_deck = self.mw.col.decks.get(sample_did)
+        source_did = source_card.odid or source_card.did # account for dyn decks
+        source_deck = self.mw.col.decks.get(source_did)
 
         if not ntype or ntype == MODEL_SAME:
-            model = sample.model()
+            model = sourceNote.model()
         else:
             model = self.mw.col.models.byName(ntype)
         
         # Assign model to deck
-        self.mw.col.decks.select(sample_did)
-        sample_deck['mid'] = model['id']
-        self.mw.col.decks.save(sample_deck)
+        self.mw.col.decks.select(source_did)
+        source_deck['mid'] = model['id']
+        self.mw.col.decks.save(source_deck)
         # Assign deck to model
         self.mw.col.models.setCurrent(model)
-        model['did'] = sample_did
+        model['did'] = source_did
         self.mw.col.models.save(model)
         
         # Create new note
         new_note = self.mw.col.newNote()
-        new_note.tags = sample.tags
+        new_note.tags = sourceNote.tags
         if not ntype: # dupe
-            fields = sample.fields
+            fields = sourceNote.fields
         else:
             # original solution: fill all fields to avoid notes without cards
             #    fields = ["."] * len(new_note.fields)
@@ -279,7 +285,7 @@ class Rearranger:
 
         # Copy over scheduling from old cards
         if sched:
-            scards = sample.cards()
+            scards = sourceNote.cards()
             ncards = new_note.cards()
             for orig, copy in zip(scards, ncards):
                 self.copyCardScheduling(orig, copy)
