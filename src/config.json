@@ -1,0 +1,18 @@
+{
+    "general_ASK_CONFIRMATION": true,
+    "general_CARD_COUNT_WARNING": 2000,
+    "general_DEFAULT_MODEL": "Basic",
+    "HOTKEY_ORGANIZER": "Ctrl+G",
+    "HOTKEY_INSERT": "Ctrl+N",
+    "HOTKEY_DUPE": "Ctrl+D",
+    "HOTKEY_DUPE_SCHED": "Ctrl+Shift+D",
+    "HOTKEY_REMOVE": "Del",
+    "HOTKEY_CUT": "Ctrl+X",
+    "HOTKEY_PASTE": "Ctrl+V",
+    "REVIEWER_CONTEXT_MENU": true,
+    "REVIEWER_OPEN_BROWSER": true,
+    "nids_BACKUP_NIDS": true, 
+    "nids_BACKUP_FIELD": "onid",
+    "nids_HIDE_BACKUP_FIELD in editor" : true,
+    "nids_NID_FIELD_overwrite" : "Note ID"
+}

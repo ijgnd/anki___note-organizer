@@ -13,7 +13,7 @@ from anki.errors import AnkiError
 from aqt import mw
 from aqt.utils import tooltip
 from anki.utils import intTime, ids2str
-from .config import *
+from .config import gc
 from .consts import *
 
 class Rearranger:
@@ -263,8 +263,8 @@ class Rearranger:
             # need to fill all fields to avoid notes without cards
             fields = ["."] * len(new_note.fields)
         new_note.fields = fields
-        if BACKUP_FIELD in new_note: # skip onid field
-            new_note[BACKUP_FIELD] = ""
+        if gc("BACKUP_FIELD") in new_note: # skip onid field
+            new_note[gc("BACKUP_FIELD")] = ""
         
         # Refresh note and add to database
         new_note.flush()
@@ -325,9 +325,9 @@ class Rearranger:
     def setNidFields(self, nid, onid, idnote=False):
         """Store original NID in a predefined field (if available)"""
         note = self.mw.col.getNote(nid)
-        if BACKUP_FIELD in note and not note[BACKUP_FIELD]:
-            note[BACKUP_FIELD] = str(onid)
-        if idnote and NID_FIELD in note: # add nid to note id field
+        if gc("BACKUP_FIELD") in note and not note[gc("BACKUP_FIELD")]:
+            note[gc("BACKUP_FIELD")] = str(onid)
+        if idnote and gc("nids_NID_FIELD_overwrite") in note: # add nid to note id field
             note["Note ID"] = str(nid)
         note.flush()
 

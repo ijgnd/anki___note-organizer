@@ -20,7 +20,7 @@ from aqt.utils import saveHeader, restoreHeader, saveGeom, \
 from .forms import organizer
 from .notetable import NoteTable
 from .rearranger import Rearranger
-from .config import *
+from .config import gc
 from .consts import *
 
 
@@ -68,17 +68,17 @@ class Organizer(QDialog):
         self.table.setContextMenuPolicy(Qt.CustomContextMenu)
         self.table.customContextMenuRequested.connect(self.onTableContext)
 
-        s = QShortcut(QKeySequence(HOTKEY_INSERT),
+        s = QShortcut(QKeySequence(gc("HOTKEY_INSERT")),
                 self.table, activated=self.onInsertNote)
-        s = QShortcut(QKeySequence(HOTKEY_DUPE),
+        s = QShortcut(QKeySequence(gc("HOTKEY_DUPE")),
                 self.table, activated=self.onDuplicateNote)
-        s = QShortcut(QKeySequence(HOTKEY_DUPE_SCHED),
+        s = QShortcut(QKeySequence(gc("HOTKEY_DUPE_SCHED")),
                 self.table, activated=lambda: self.onDuplicateNote(sched=True))
-        s = QShortcut(QKeySequence(HOTKEY_REMOVE),
+        s = QShortcut(QKeySequence(gc("HOTKEY_REMOVE")),
                 self.table, activated=self.onRemoveNotes)
-        s = QShortcut(QKeySequence(HOTKEY_CUT),
+        s = QShortcut(QKeySequence(gc("HOTKEY_CUT")),
                 self.table, activated=self.onCutRow)
-        s = QShortcut(QKeySequence(HOTKEY_PASTE),
+        s = QShortcut(QKeySequence(gc("HOTKEY_PASTE")),
                 self.table, activated=self.onPasteRow)
 
         # Sets up context sub-menu and hotkeys for various note types
@@ -242,25 +242,25 @@ class Organizer(QDialog):
         gpos = self.table.viewport().mapToGlobal(pos)
         m = QMenu()
         
-        a = m.addAction("Cut\t{}".format(HOTKEY_CUT))
+        a = m.addAction("Cut\t{}".format(gc("HOTKEY_CUT")))
         a.triggered.connect(self.onCutRow)
         if self.clipboard:
-            a = m.addAction("Paste\t{}".format(HOTKEY_PASTE))
+            a = m.addAction("Paste\t{}".format(gc("HOTKEY_PASTE")))
             a.triggered.connect(self.onPasteRow)
 
-        a = m.addAction("New note\t{}".format(HOTKEY_INSERT))
+        a = m.addAction("New note\t{}".format(gc("HOTKEY_INSERT")))
         a.triggered.connect(self.onInsertNote)
 
-        a = m.addAction("Duplicate note\t{}".format(HOTKEY_DUPE))
+        a = m.addAction("Duplicate note\t{}".format(gc("HOTKEY_DUPE")))
         a.triggered.connect(self.onDuplicateNote)
 
         a = m.addAction(
-            "Duplicate note (with scheduling)\t{}".format(HOTKEY_DUPE_SCHED))
+            "Duplicate note (with scheduling)\t{}".format(gc("HOTKEY_DUPE_SCHED")))
         a.triggered.connect(lambda: self.onDuplicateNote(sched=True))
 
         m.addMenu(self.models_menu)
 
-        a = m.addAction("Remove\t{}".format(HOTKEY_REMOVE))
+        a = m.addAction("Remove\t{}".format(gc("HOTKEY_REMOVE")))
         a.triggered.connect(self.onRemoveNotes)
 
         m.exec_(gpos)
@@ -510,7 +510,7 @@ class Organizer(QDialog):
         to_add = len([i for i in nn if i.startswith((NEW_NOTE, DUPE_NOTE))])
         to_move = len(moved)
 
-        if not ASK_CONFIRMATION:
+        if not gc("general_ASK_CONFIRMATION"):
             pass
         else:
             ret = askUser("Overview of <b>changes</b>:"

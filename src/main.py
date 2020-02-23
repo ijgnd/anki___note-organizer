@@ -21,7 +21,7 @@ from anki.hooks import addHook, wrap
 
 from .organizer import Organizer
 from .rearranger import Rearranger
-from .config import *
+from .config import gc
 from .consts import *
 
 
@@ -62,7 +62,7 @@ def onReorganize(self):
         count = len(sel)
     else:
         count = len(self.model.cards)
-    if CARD_COUNT_WARNING and count > CARD_COUNT_WARNING:
+    if gc("general_CARD_COUNT_WARNING") and count > gc("general_CARD_COUNT_WARNING"):
         ret = askUser("Are you sure you want to invoke Note Organizer "
             "on {} cards? This might take a while".format(count),
             title="Note Organizer")
@@ -81,7 +81,7 @@ def setupMenu(self):
     menu = self.menuOrg
     menu.addSeparator()
     a = menu.addAction('Reorganize Notes...')
-    a.setShortcut(QKeySequence(HOTKEY_ORGANIZER))
+    a.setShortcut(QKeySequence(gc("HOTKEY_ORGANIZER")))
     a.triggered.connect(self.onReorganize)
 
 
@@ -89,11 +89,11 @@ def setupMenu(self):
 
 def onSetNote(self, note, hide=True, focus=False):
     """Hide BACKUP_Field if configured"""
-    if not self.note or BACKUP_FIELD not in self.note:
+    if not self.note or gc("BACKUP_FIELD") not in self.note:
         return
     model = self.note.model()
     flds = self.mw.col.models.fieldNames(model)
-    idx = flds.index(BACKUP_FIELD)
+    idx = flds.index(gc("BACKUP_FIELD"))
     self.web.eval("""
         // hide last fname, field, and snowflake (FrozenFields add-on)
             document.styleSheets[0].addRule(
@@ -162,7 +162,7 @@ def onReviewerOrgMenu(command, offset):
     res = rearranger.processNids(note_pool, start, moved)
 
     # display result in browser
-    if REVIEWER_OPEN_BROWSER:
+    if gc("REVIEWER_OPEN_BROWSER"):
         browser = aqt.dialogs.open("Browser", mw)
         browser.form.searchEdit.lineEdit().setText(search)
         browser.onSearch()
@@ -179,8 +179,8 @@ Browser.onRowChanged = wrap(Browser.onRowChanged, onBrowserRowChanged, "after")
 Browser.closeEvent = wrap(Browser.closeEvent, onBrowserClose, "before")
 Browser.deleteNotes = wrap(Browser.deleteNotes, onBrowserNoteDeleted, "around")
 
-if HIDE_BACKUP_FIELD:
+if gc("nids_HIDE_BACKUP_FIELD in editor"):
     Editor.setNote = wrap(Editor.setNote, onSetNote, "after")
 
-if REVIEWER_CONTEXT_MENU:
+if gc("REVIEWER_CONTEXT_MENU"):
     addHook("AnkiWebView.contextMenuEvent", addNoteOrganizerActions)
