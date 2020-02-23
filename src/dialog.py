@@ -36,11 +36,11 @@ class Organizer(QDialog):
         super(Organizer, self).__init__(parent=browser)
         self.browser = browser
         self.mw = browser.mw
-        self.f = organizer.Ui_Dialog()
-        self.f.setupUi(self)
+        self.dialog = organizer.Ui_Dialog()
+        self.dialog.setupUi(self)
         self.table = NoteTable(self)
         self.hh = self.table.horizontalHeader()
-        self.f.tableLayout.addWidget(self.table)
+        self.dialog.tableLayout.addWidget(self.table)
         self.oldnids = []
         self.clipboard = []
         self.modified = False
@@ -69,8 +69,8 @@ class Organizer(QDialog):
         """Connect event signals to slots"""
         self.table.selectionModel().selectionChanged.connect(self.onRowChanged)
         self.table.cellChanged.connect(self.onCellChanged)
-        self.f.buttonBox.rejected.connect(self.onReject)
-        self.f.buttonBox.accepted.connect(self.onAccept)
+        self.dialog.buttonBox.rejected.connect(self.onReject)
+        self.dialog.buttonBox.accepted.connect(self.onAccept)
 
         self.table.setContextMenuPolicy(Qt.CustomContextMenu)
         self.table.customContextMenuRequested.connect(self.onTableContext)
@@ -96,8 +96,8 @@ class Organizer(QDialog):
         """Set up datetime range"""
         qtime = QDateTime()
         qtime.setTime_t(0)
-        self.f.date.setMinimumDateTime(qtime)
-        self.f.date.setMaximumDateTime(QDateTime.currentDateTime())
+        self.dialog.date.setMinimumDateTime(qtime)
+        self.dialog.date.setMaximumDateTime(QDateTime.currentDateTime())
 
 
     def setupModels(self):
@@ -236,12 +236,12 @@ class Organizer(QDialog):
         timestamp = nid // 1000
         qtime = QDateTime()
         qtime.setTime_t(timestamp)
-        self.f.date.setDateTime(qtime)
+        self.dialog.date.setDateTime(qtime)
 
 
     def getDate(self):
         """Get datetime"""
-        qtime = self.f.date.dateTime()
+        qtime = self.dialog.date.dateTime()
         if not qtime.isValid():
             return None
         timestamp = qtime.toTime_t()
@@ -538,7 +538,7 @@ class Organizer(QDialog):
                 return False
           
         start = self.getDate() # TODO: identify cases where only date modified
-        repos = self.f.cbRepos.isChecked()
+        repos = self.dialog.cbRepos.isChecked()
 
         rearranger = Rearranger(browser=self.browser)
         rearranger.processNids(newnids, start, moved, repos=repos)
