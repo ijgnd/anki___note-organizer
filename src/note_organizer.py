@@ -175,7 +175,8 @@ addHook("browser.setupMenus", setupMenu)
 Browser.onReorganize = onReorganize
 Browser.organizer = None
 
-Browser.onRowChanged = wrap(Browser.onRowChanged, onBrowserRowChanged, "after")
+Browser.onRowChanged = wrap(Browser._onRowChanged, onBrowserRowChanged, "after")
+# TODO gui_hooks.browser_did_change_row(self)
 Browser.closeEvent = wrap(Browser.closeEvent, onBrowserClose, "before")
 Browser.deleteNotes = wrap(Browser.deleteNotes, onBrowserNoteDeleted, "around")
 
