@@ -45,6 +45,7 @@ def onBrowserNoteDeleted(self, _old):
     self.organizer.deleteNids(nids)
     return ret
 
+
 def onBrowserClose(self, evt):
     """Close with browser"""
     if self.organizer:

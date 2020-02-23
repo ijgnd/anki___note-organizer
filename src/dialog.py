@@ -64,6 +64,7 @@ class Organizer(QDialog):
         if self.browser.card:
             self.focusNid(str(self.browser.card.nid))
 
+
     def setupEvents(self):
         """Connect event signals to slots"""
         self.table.selectionModel().selectionChanged.connect(self.onRowChanged)
@@ -89,6 +90,7 @@ class Organizer(QDialog):
 
         # Sets up context sub-menu and hotkeys for various note types
         self.models_menu = self.setupModels()
+
 
     def setupDate(self):
         """Set up datetime range"""
