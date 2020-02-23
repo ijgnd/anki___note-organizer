@@ -8,6 +8,8 @@ Copyright: (c) Glutanimate 2017
 License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.html
 """
 
+from pprint import pprint as pp
+
 from anki.errors import AnkiError
 
 from aqt import mw
@@ -25,7 +27,7 @@ class Rearranger:
         self.browser = browser
         self.mw = mw
         self.card = card
-        self.nid_map = {}
+        self.nid_map = {}  # in rearrange: self.nid_map[nid] = new_nid
 
 
     def processNids(self, nids, start, moved, repos=False):
@@ -36,7 +38,7 @@ class Rearranger:
 
         - nids:  list, unprocessed note IDs as strings,
                  including potential action prefixes
-        - start: int, creation date of first note as UNIX timestamp
+        - start: int, creation date of first note (first row in dialog) as UNIX timestamp
         - moved: list, nids that were interactively moved by the user
         - repos: boolean, whether to reposition due dates or not
         """
