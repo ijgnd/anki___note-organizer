@@ -434,7 +434,7 @@ class Organizer(QDialog):
         rows = self.table.getSelectedRows()
         if not rows:
             return
-        item = self.table.item(rows[0], 0)
+        item = self.table.item(rows[0], 0)  # PyQt5.QtWidgets.QTableWidgetItem
         if not item:
             return
         nid = item.text()
