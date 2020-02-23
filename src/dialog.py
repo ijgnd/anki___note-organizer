@@ -235,7 +235,8 @@ class Organizer(QDialog):
             return False
         timestamp = nid // 1000
         qtime = QDateTime()
-        qtime.setTime_t(timestamp)
+        qtime.setTime_t(timestamp)  # this qt function is obsolete - https://doc.qt.io/qt-5/qdatetime-obsolete.html#setTime_t
+        # qtime.setSecsSinceEpoch(timestamp)
         self.dialog.date.setDateTime(qtime)
 
 
@@ -244,7 +245,8 @@ class Organizer(QDialog):
         qtime = self.dialog.date.dateTime()
         if not qtime.isValid():
             return None
-        timestamp = qtime.toTime_t()
+        timestamp = qtime.toTime_t()  # this qt function is obsolete - https://doc.qt.io/qt-5/qdatetime-obsolete.html#toTime_t
+        # timestamp = qtime.toSecsSinceEpoch()
         return timestamp
 
 
