@@ -137,14 +137,13 @@ def onReviewerOrgMenu(command, offset):
     did = card.odid or card.did # account for dyn decks
     deck = mw.col.decks.nameOrNone(did)
     note = card.note()
-    nid = note.id
     
     # rearrange in context of origin deck
     search = "deck:'{}'".format(deck)
     note_pool = mw.col.findNotes(search)
     note_pool.sort()
     try:
-        idx = note_pool.index(nid)
+        idx = note_pool.index(note.id)
     except ValueError: # nid not in deck
         return False
     
@@ -152,11 +151,31 @@ def onReviewerOrgMenu(command, offset):
     if command.startswith(NEW_NOTE):
         data = MODEL_SAME
     else:
-        data = str(nid)
+        data = str(note.id)
     composite = command + ": " + data
     note_pool.insert(idx + offset, composite)
     
-    start = None
+    # "start = None" (from glutanimate's version from 2017) changes all nids to more or less
+    # the current time when you insert a note before the first note in a deck.
+    # This doesn't happen if I insert a new note in the gui at the first position.
+    # Symptom: rearranger.adjust_nid_order prints "skipping first nid" when called from the 
+    # reviewer for a new note before the first one in the deck whereas from the gui I 
+    # get "modifying". 
+    # With "start = none" the line "elif start and start != (nid // 1000):" from 
+    # rearranger.adjust_nid_order can't be true ...
+    # In the gui organizer.updateDate sets start to nid/1000 of the 
+    # first = oldest nid so that the "elif ..." evaluates to True ...
+    # So here I need to set start to nid//1000 of the oldest nid of the deck instead of None
+    # Problem: The first element in the list might be 'New: Same note type as previous' so 
+    # I have to iterate.
+    for nid in note_pool:
+        try:
+            timestamp = int(nid) // 1000
+        except:
+            pass
+        else:
+            break
+    start = timestamp  # orgin deck has at least one note (=the note creating the card reviewed)
     moved = []
 
     rearranger = Rearranger(card=card)
