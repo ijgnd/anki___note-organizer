@@ -1,2 +1,0 @@
-rm organizer.zip
-zip -R organizer.zip designer/* screenshots/* tools note_*/*{,/*} config.* *py  LICENSE *.md zipping --exclude \*~ \*zip ankiweb
