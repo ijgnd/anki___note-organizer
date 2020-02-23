@@ -148,72 +148,6 @@ class Rearranger:
         return processed, deleted, created
 
 
-    def rearrange(self, nids, start, moved, created):
-        """Adjust nid order"""
-        modified = []
-        nidlist = []
-        alterated = moved + created
-        last = 0
-
-        for idx, nid in enumerate(nids):
-            try:
-                nxt = int(nids[idx+1])
-            except (IndexError, ValueError):
-                nxt = nid + 1
-
-            if not self.noteExists(nid): # note deleted
-                continue
-
-            print("------------------------------")
-            print(("last", last))
-            print(("current", nid))
-            print(("next", nxt))
-            print(("nextmoved", nxt in moved))
-            print(("expected", last < nid < nxt))
-            # check if order as expected
-            if last != 0 and last < nid < nxt:
-                if nid in alterated and nxt in alterated:
-                    print("moved block")
-                    pass
-                else:
-                    print("skipping")
-                    last = nid
-                    nidlist.append(nid)
-                    continue
-
-            if last != 0:
-                new_nid = last + 1 # regular nids
-            elif start and start != (nid // 1000):
-                new_nid = start * 1000 # first nid, date changed
-            else:
-                print("skipping first nid")
-                last = nid # first nid, date unmodified
-                nidlist.append(nid)
-                continue
-
-            print("modifying")
-            
-            
-            new_nid = self.updateNidSafely(nid, new_nid)
-
-            if nid not in created:
-                modified.append(new_nid)
-                idnote = False
-            else:
-                idnote = True
-
-            self.setNidFields(new_nid, nid, idnote=idnote)
-
-            # keep track of moved nids (e.g. for dupes)
-            self.nid_map[nid] = new_nid
-            
-            print(("new_nid", new_nid))
-            nidlist.append(new_nid)
-            last = new_nid
-
-        return modified, nidlist
-
-
     def addNote(self, neighbNid, ntype=None, sched=False):
         """
         Create new note based on a neighboring nid: This is used as the source note from which
@@ -291,6 +225,72 @@ class Rearranger:
                 self.copyCardScheduling(orig, copy)
 
         return new_note.id
+
+
+    def rearrange(self, nids, start, moved, created):
+        """Adjust nid order"""
+        modified = []
+        nidlist = []
+        alterated = moved + created
+        last = 0
+
+        for idx, nid in enumerate(nids):
+            try:
+                nxt = int(nids[idx+1])
+            except (IndexError, ValueError):
+                nxt = nid + 1
+
+            if not self.noteExists(nid): # note deleted
+                continue
+
+            print("------------------------------")
+            print(("last", last))
+            print(("current", nid))
+            print(("next", nxt))
+            print(("nextmoved", nxt in moved))
+            print(("expected", last < nid < nxt))
+            # check if order as expected
+            if last != 0 and last < nid < nxt:
+                if nid in alterated and nxt in alterated:
+                    print("moved block")
+                    pass
+                else:
+                    print("skipping")
+                    last = nid
+                    nidlist.append(nid)
+                    continue
+
+            if last != 0:
+                new_nid = last + 1 # regular nids
+            elif start and start != (nid // 1000):
+                new_nid = start * 1000 # first nid, date changed
+            else:
+                print("skipping first nid")
+                last = nid # first nid, date unmodified
+                nidlist.append(nid)
+                continue
+
+            print("modifying")
+            
+            
+            new_nid = self.updateNidSafely(nid, new_nid)
+
+            if nid not in created:
+                modified.append(new_nid)
+                idnote = False
+            else:
+                idnote = True
+
+            self.setNidFields(new_nid, nid, idnote=idnote)
+
+            # keep track of moved nids (e.g. for dupes)
+            self.nid_map[nid] = new_nid
+            
+            print(("new_nid", new_nid))
+            nidlist.append(new_nid)
+            last = new_nid
+
+        return modified, nidlist
 
 
     def copyCardScheduling(self, o, c):
