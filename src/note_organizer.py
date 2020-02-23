@@ -19,7 +19,7 @@ from aqt.utils import askUser
 
 from anki.hooks import addHook, wrap
 
-from .organizer import Organizer
+from .organizer_dialog import Organizer
 from .rearranger import Rearranger
 from .config import gc
 from .consts import *

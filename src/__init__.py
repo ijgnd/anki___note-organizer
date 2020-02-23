@@ -1,1 +1,1 @@
-from . import organizer
+from . import note_organizer
