@@ -136,7 +136,7 @@ class Rearranger:
                     sched = action == DUPE_NOTE_SCHED
                 else:
                     ntype = "".join(data)
-                    sample = last or nxt or self.first_valid_nid_in_nids_list(nids)
+                    sample = nxt or self.first_valid_nid_in_nids_list(nids)
                 if not sample or not self.noteExists(sample):
                     continue
                 nid = self.addNote(sample, ntype=ntype, sched=sched)
