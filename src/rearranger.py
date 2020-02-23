@@ -101,7 +101,6 @@ class Rearranger:
         processed = []
         deleted = []
         created = []
-        last = 0
 
         for idx, nid in enumerate(nids):
             try:
@@ -144,8 +143,6 @@ class Rearranger:
                     continue
                 created.append(int(nid))
                 processed.append(int(nid))
-
-            last = nid
 
         return processed, deleted, created
 
