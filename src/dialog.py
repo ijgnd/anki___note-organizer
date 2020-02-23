@@ -203,7 +203,7 @@ class Organizer(QDialog):
 
         for row, columns in enumerate(data):
             for col, value in enumerate(columns):
-                if isinstance(value, int) and value > 1507762317412:
+                if isinstance(value, int) and value > 2147483647:
                     value = str(value)
                 item = QTableWidgetItem(value)
                 f = QFont()
