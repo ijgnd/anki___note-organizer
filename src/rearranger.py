@@ -17,7 +17,7 @@ from aqt.utils import tooltip
 from anki.utils import intTime, ids2str
 
 from .config import mpp, gc
-from .consts import *
+from .no_consts import *
 from .helpers import fields_to_fill_for_nonempty_front_template
 
 class Rearranger:

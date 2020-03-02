@@ -16,7 +16,7 @@ from anki.hooks import addHook, wrap
 from .dialog import Organizer
 from .rearranger import Rearranger
 from .config import gc
-from .consts import *
+from .no_consts import *
 
    
 def onBrowserRowChanged(self, current, previous):

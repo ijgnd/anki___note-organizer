@@ -27,7 +27,7 @@ from .forms import organizer
 from .custom_table_widget import NoteTable
 from .rearranger import Rearranger
 from .config import gc
-from .consts import *
+from .no_consts import *
 
 
 class Organizer(QDialog):

@@ -4,7 +4,7 @@ import aqt
 from aqt import mw
 
 from .config import gc
-from .consts import *
+from .no_consts import *
 from .rearranger import Rearranger
 
 menu_entries = [
