@@ -1,109 +1,11 @@
-"""
-This file is part of the Note Organizer add-on for Anki
+from anki.hooks import addHook
 
-Main Module, hooks add-on methods into Anki
-
-Copyright: (c) Glutanimate 2017
-           (c) ijgnd 2020
-License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.html
-"""
-
-from pprint import pprint as pp
-
-from anki.lang import _
 import aqt
-from aqt.qt import *
 from aqt import mw
-from aqt.browser import Browser
-from aqt.editor import Editor
-from aqt.utils import askUser
 
-from anki.hooks import addHook, wrap
-
-from .dialog import Organizer
-from .rearranger import Rearranger
 from .config import gc
 from .consts import *
-
-
-###### Browser
-   
-def onBrowserRowChanged(self, current, previous):
-    """Sync row position to Organizer"""
-    if not self.organizer:
-        return
-    self.organizer.focusNid(self.card.nid)
-
-
-def onBrowserNoteDeleted(self, _old):
-    """Synchronize note deletion to Organizer"""
-    if not self.organizer:
-        return _old(self)
-    nids = self.selectedNotes()
-    if not nids:
-        return
-    ret = _old(self)
-    self.organizer.deleteNids(nids)
-    return ret
-
-
-def onBrowserClose(self, evt):
-    """Close with browser"""
-    if self.organizer:
-        self.organizer.close()
-
-
-def onReorganize(self):
-    """Invoke Organizer window"""
-    if self.organizer:
-        self.organizer.show()
-        return
-    
-    sel = self.selectedCards()
-    if sel and len(sel) > 1:
-        count = len(sel)
-    else:
-        count = len(self.model.cards)
-    if gc("general_CARD_COUNT_WARNING") and count > gc("general_CARD_COUNT_WARNING"):
-        ret = askUser("Are you sure you want to invoke Note Organizer "
-            "on {} cards? This might take a while".format(count),
-            title="Note Organizer")
-        if not ret:
-            return False
-    
-    self.organizer = Organizer(self)
-    self.organizer.show()
-
-
-def setupMenu(self):
-    """Setup menu entries and hotkeys"""
-    self.menuOrg = QMenu(_("&Organizer"))
-    action = self.menuBar().insertMenu(
-                self.mw.form.menuTools.menuAction(), self.menuOrg)
-    menu = self.menuOrg
-    menu.addSeparator()
-    a = menu.addAction('Reorganize Notes...')
-    a.setShortcut(QKeySequence(gc("HOTKEY_ORGANIZER")))
-    a.triggered.connect(self.onReorganize)
-
-
-###### Editor
-
-def onSetNote(self, note, hide=True, focus=False):
-    """Hide BACKUP_Field if configured"""
-    if not self.note or gc("BACKUP_FIELD") not in self.note:
-        return
-    model = self.note.model()
-    flds = self.mw.col.models.fieldNames(model)
-    idx = flds.index(gc("BACKUP_FIELD"))
-    self.web.eval("""
-        // hide last fname, field, and snowflake (FrozenFields add-on)
-            document.styleSheets[0].addRule(
-                'tr:nth-child({0}) .fname, #f{1}, #i{1}', 'display: none;');
-        """.format(idx*2+1, idx))
-
-
-###### Reviewer
+from .rearranger import Rearranger
 
 menu_entries = [
     {"label": "New Note - &before", "cmd": NEW_NOTE, "offset": 0},
@@ -188,21 +90,6 @@ def onReviewerOrgMenu(command, offset):
         browser.form.searchEdit.lineEdit().setText(search)
         browser._onSearchActivated()
         rearranger.selectNotes(browser, res)
-
-
-# Hooks, etc.:
-
-addHook("browser.setupMenus", setupMenu)
-Browser.onReorganize = onReorganize
-Browser.organizer = None
-
-Browser.onRowChanged = wrap(Browser._onRowChanged, onBrowserRowChanged, "after")
-# TODO gui_hooks.browser_did_change_row(self)
-Browser.closeEvent = wrap(Browser.closeEvent, onBrowserClose, "before")
-Browser.deleteNotes = wrap(Browser.deleteNotes, onBrowserNoteDeleted, "around")
-
-if gc("nids_HIDE_BACKUP_FIELD in editor"):
-    Editor.setNote = wrap(Editor.setNote, onSetNote, "after")
 
 if gc("REVIEWER_CONTEXT_MENU"):
     addHook("AnkiWebView.contextMenuEvent", addNoteOrganizerActions)
