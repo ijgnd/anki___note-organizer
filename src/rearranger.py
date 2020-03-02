@@ -117,8 +117,16 @@ class Rearranger:
             try:
                 nxt = int(all_rows_nids_raw[idx+1])
             except (IndexError, ValueError):
-                # last Index
+                # IndexError: last Index
+                # ValueError: the next note is also newly created as new, dupe etc.
                 nxt = None
+
+            # e.g. values like this
+            #    New: Same note type as previous   NEW_NOTE: MODEL_SAME
+            #    Dupe: 1580064801573               DUPE_NOTE
+            #    Dupe (sched): 1580064801594       DUPE_NOTE_SCHED
+            #    New: Cloze                        NEW_NOTE
+            #    Del: 1580064837640                DEL_NOTE
 
             action = vals[0]  # e.g. "New" (=NEW_NOTE)
             data = vals[1:]   # e.g. "Same note type as previous" (=MODEL_SAME)
@@ -141,7 +149,7 @@ class Rearranger:
                     sched = action == DUPE_NOTE_SCHED
                 else:  # NEW_NOTE
                     ntype = "".join(data)
-                    # for new notes nxt is the NEXT nid in dialog
+                    # nxt is the next exisiting nid. if the following note is also inserted it's None.
                     neighboring_nid = nxt or self.first_valid_nid_in_nids_list(all_rows_nids_raw)
                 if not neighboring_nid or not self.noteExists(neighboring_nid):
                     continue
@@ -223,7 +231,7 @@ class Rearranger:
         new_note.flush()
         self.mw.col.addNote(new_note)
 
-        # Copy over scheduling from old cards
+        # Copy over scheduling from old cards for dupes
         if sched:
             scards = sourceNote.cards()
             ncards = new_note.cards()
