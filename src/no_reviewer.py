@@ -41,9 +41,13 @@ def onReviewerOrgMenu(command, offset):
     deck = mw.col.decks.nameOrNone(did)
     note = card.note()
     
-    # rearrange in context of origin deck
     search = "deck:'{}'".format(deck)
-    note_pool = mw.col.findNotes(search)
+    # glutanimate used: rearrange in context of origin deck
+    #   note_pool = mw.col.findNotes(search)
+    # Downside: other notes in other decks might have more recent nids than the prior note
+    # in the same deck so that the new note is sorted before the other ones. This can't be useful,
+    # especially if you view your notes independent of the deck or reorganize them later.
+    note_pool = mw.col.db.list("select id from notes") 
     note_pool.sort()
     try:
         idx = note_pool.index(note.id)
