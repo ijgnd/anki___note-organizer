@@ -16,7 +16,7 @@ from aqt import mw
 from aqt.utils import tooltip
 from anki.utils import intTime, ids2str
 
-from .config import gc
+from .config import mpp, gc
 from .consts import *
 from .helpers import fields_to_fill_for_nonempty_front_template
 
