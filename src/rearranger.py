@@ -45,12 +45,17 @@ class Rearranger:
         - repos: boolean, whether to reposition due dates or not
         """
         
-        # Full database sync required:
-        try:
-            self.mw.col.modSchema(check=True)
-        except AnkiError:
-            tooltip("Reorganization aborted.")
-            return False
+        # glutanimate's code from 2017 had
+            # Full database sync required:
+            # try:
+            #    self.mw.col.modSchema(check=True)
+            # except AnkiError:
+            #     tooltip("Reorganization aborted.")
+            #     return False
+        # in 2020 Arthur extended Advanced Browser with a nid-change function that doesn't require
+        # a full database upload, see my comments below in updateNidSafely and see
+        # https://github.com/hssm/advanced-browser/commit/7fba8f30f0ebd12b2f458f8a56ec7c6c068ddf24
+
         # Create checkpoint
         self.mw.checkpoint("Reorganize notes")
 
@@ -334,7 +339,7 @@ class Rearranger:
             """select id from notes where id = ?""", nid)
 
 
-    def updateNidSafely(self, nid, new_nid):
+    def updateNidSafely(self, old_nid, new_nid):
         """Update nid while ensuring that timestamp doesn't already exist"""
         while self.noteExists(new_nid):
             new_nid += 1
@@ -346,14 +351,38 @@ class Rearranger:
                 new_nid -= 1
                 break
 
-        # Update note row
-        self.mw.col.db.execute(
-            """update notes set id=? where id = ?""", new_nid, nid)
-
-        # Update card rows
-        self.mw.col.db.execute(
-            """update cards set nid=? where nid = ?""", new_nid, nid)
-
+        
+        # Glutanimate had this:
+        # # Update note row
+        # self.mw.col.db.execute("""update notes set id=? where id = ?""", new_nid, old_nid)
+        # # Update card rows
+        # self.mw.col.db.execute("""update cards set nid=? where nid = ?""", new_nid, old_nid)
+        """
+        in 2020 Arthur extended Advanced Browser with a nid-change function that doesn't require
+        a full database upload, see
+        https://github.com/hssm/advanced-browser/commit/7fba8f30f0ebd12b2f458f8a56ec7c6c068ddf24 
+        His code doesn't require a full sync (he said in a direct reddit message)
+        https://github.com/hssm/advanced-browser/blob/92ffac0555a5d7058ba0865c63c2e8cb52d8dbc6/advancedbrowser/advancedbrowser/internal_fields.py#L47
+        Arthur's code is:
+            old_nid = c.nid
+            n = c.note()
+            cards = n.cards()
+            n.id = new_nid
+            n.flush()
+            for card in cards:
+                card.nid = new_nid
+                card.flush()
+            c.col._remNotes([old_nid])
+        So Arthur just adds "col._remNotes([old_nid])"
+        """
+        n = self.mw.col.getNote(old_nid)
+        cards = n.cards()
+        n.id = new_nid
+        n.flush()
+        for card in cards:
+            card.nid = new_nid
+            card.flush()
+        self.mw.col._remNotes([old_nid])   
         return new_nid
 
 
