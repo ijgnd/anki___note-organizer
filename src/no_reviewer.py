@@ -89,11 +89,11 @@ def onReviewerOrgMenu(command, offset):
     res = rearranger.processNids(note_pool, start, moved)
 
     # display result in browser
-    if gc("REVIEWER_OPEN_BROWSER"):
+    if gc("reviewer: Open Browser"):
         browser = aqt.dialogs.open("Browser", mw)
         browser.form.searchEdit.lineEdit().setText(search)
         browser._onSearchActivated()
         rearranger.selectNotes(browser, res)
 
-if gc("REVIEWER_CONTEXT_MENU"):
+if gc("reviewer: Context Menu"):
     addHook("AnkiWebView.contextMenuEvent", addNoteOrganizerActions)

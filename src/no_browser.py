@@ -55,7 +55,7 @@ def onReorganize(self):
         count = len(sel)
     else:
         count = len(self.model.cards)
-    if gc("general_CARD_COUNT_WARNING") and count > gc("general_CARD_COUNT_WARNING"):
+    if gc("general: Card Count Warning") and count > gc("general: Card Count Warning"):
         ret = askUser("Are you sure you want to invoke Note Organizer "
             "on {} cards? This might take a while".format(count),
             title="Note Organizer")
@@ -74,7 +74,7 @@ def setupMenu(self):
     menu = self.menuOrg
     menu.addSeparator()
     a = menu.addAction('Reorganize Notes...')
-    a.setShortcut(QKeySequence(gc("HOTKEY_ORGANIZER")))
+    a.setShortcut(QKeySequence(gc("shortcut: Organizer")))
     a.triggered.connect(self.onReorganize)
 
 

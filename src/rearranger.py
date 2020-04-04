@@ -358,7 +358,7 @@ class Rearranger:
         note = self.mw.col.getNote(nid)
         if gc("BACKUP_FIELD") in note and not note[gc("BACKUP_FIELD")]:
             note[gc("BACKUP_FIELD")] = str(onid)
-        if idnote and gc("nids_NID_FIELD_overwrite") in note: # add nid to note id field
+        if idnote and gc("nids: nid field overwrite") in note: # add nid to note id field
             note["Note ID"] = str(nid)
         note.flush()
 

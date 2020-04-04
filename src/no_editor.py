@@ -18,5 +18,5 @@ def onSetNote(self, note, hide=True, focus=False):
         """.format(idx*2+1, idx))
 
 
-if gc("nids_HIDE_BACKUP_FIELD in editor"):
+if gc("nids: hide backup field in editor"):
     Editor.setNote = wrap(Editor.setNote, onSetNote, "after") 
