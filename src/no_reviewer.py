@@ -41,7 +41,7 @@ def onReviewerOrgMenu(command, offset):
     deck = mw.col.decks.nameOrNone(did)
     note = card.note()
     
-    search = "deck:'{}'".format(deck)
+    search = 'deck:"{}"'.format(deck)
     # glutanimate used: rearrange in context of origin deck
     #   note_pool = mw.col.findNotes(search)
     # Downside: other notes in other decks might have more recent nids than the prior note
