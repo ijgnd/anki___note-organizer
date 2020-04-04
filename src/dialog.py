@@ -220,7 +220,7 @@ class Organizer(QDialog):
 
     def onCellChanged(self, row, col):
         """Update datetime display when (0,0) changed"""
-        if row == col == 0:
+        if row == col == 0 and not (self.mw.app.keyboardModifiers() & Qt.ShiftModifier):
             self.updateDate()
 
 
