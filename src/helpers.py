@@ -37,7 +37,7 @@ def myFieldsOnTemplate(fmt):
 
 # I could fill every field with "." to make sure at least one card is generated
 # with e.g.       note.fields = ["."] * len(note._model["flds"])
-# this is save (and used by the note organizer add-on). But this means that I might
+# this is save (and used by glutanimate's version of the note organizer add-on). But this means that I might
 # have to manually delete a lot. This takes a least some seconds
 # So it's probably quicker to wait for about five seconds so that Anki finds out
 # the minimal amount of fields to fill
