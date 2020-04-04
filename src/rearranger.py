@@ -221,8 +221,12 @@ class Rearranger:
             # problem: That's a hassle for note types that generate e.g. up to 20 cards ...
             # for details see helpers.py
             fields = [""] * len(new_note.fields)
-            for i in fields_to_fill_for_nonempty_front_template(new_note.mid):
-                fields[i] = "."
+            tofill = fields_to_fill_for_nonempty_front_template(new_note.mid)
+            if not tofill:  # no note of the note type exists
+                fields = ["."] * len(new_note.fields)
+            else:
+                for i in tofill:
+                    fields[i] = "."
         new_note.fields = fields
         if gc("BACKUP_FIELD") in new_note: # skip onid field
             new_note[gc("BACKUP_FIELD")] = ""
