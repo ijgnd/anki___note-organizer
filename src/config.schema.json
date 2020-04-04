@@ -1,0 +1,90 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "title": "Note Organizer",
+    "properties": {
+        "general: ask confirmation": {
+            "type": "boolean",
+            "default": true,
+            "description": "Ask confirmation before performing actions"
+        },
+        "general: Card Count Warning": {
+            "type": "integer",
+            "default": 2000,
+            "minimum": 10,
+            "maximum": 10000,
+            "description": "Display warning when invoking on more than x cards"
+        },
+        "general: Default Model": {
+            "type": "string",
+            "default": "Basic",
+            "description": "Default note type of created notes"
+        },
+        "nids: backup field": {
+            "type": "string",
+            "default": "onid",
+            "description": "field to use for Note ID backups"
+        },
+        "nids: backup nids": {
+            "type": "boolean",
+            "default": true,
+            "description": "whether or not to backup original Note IDs"
+        },
+        "nids: hide backup field in editor": {
+            "type": "boolean",
+            "default": true,
+            "description": "whether or not to hide 'nids: hide backup field in editor' in editors"
+        },
+        "nids: nid field overwrite": {
+            "type": "string",
+            "default": "Note ID",
+            "description": "support for 'Add Note ID' add-on, new nid will be written in 'nids: nid field overwrite'"
+        },
+        "reviewer: Context Menu": {
+            "type": "boolean",
+            "default": true,
+            "description": ""
+        },
+        "reviewer: Open Browser": {
+            "type": "boolean",
+            "default": true,
+            "description": ""
+        },
+        "shortcut: Cut": {
+            "type": "string",
+            "default": "Ctrl+X",
+            "description": ""
+        },
+        "shortcut: Dupe (Sched)": {
+            "type": "string",
+            "default": "Ctrl+Shift+D",
+            "description": ""
+        },
+        "shortcut: Dupe": {
+            "type": "string",
+            "default": "Ctrl+D",
+            "description": ""
+        },
+        "shortcut: Insert": {
+            "type": "string",
+            "default": "Ctrl+N",
+            "description": ""
+        },
+        "shortcut: Organizer": {
+            "type": "string",
+            "default": "Ctrl+G",
+            "description": ""
+        },
+        "shortcut: Paste": {
+            "type": "string",
+            "default": "Ctrl+V",
+            "description": ""
+        },
+        "shortcut: Remove": {
+            "type": "string",
+            "default": "Del",
+            "description": ""
+        }
+    }
+}
+
