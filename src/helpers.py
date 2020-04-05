@@ -1,7 +1,7 @@
 """
 This file is part of the Note Organizer add-on for Anki
 
-Copyright:  (c) ijgnd 2020
+Copyright:  (c) 2020 ijgnd
 
 License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.html
 """

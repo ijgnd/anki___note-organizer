@@ -1,10 +1,10 @@
 """
 This file is part of the Note Organizer add-on for Anki
 
-Note rearranger module
+Copyright: (c) 2017 Glutanimate
+           (c) 2020 Arthur Milchior
+           (c) 2020 ijgnd
 
-Copyright: (c) Glutanimate 2017
-           (c) ijgnd 2020
 License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.html
 """
 
