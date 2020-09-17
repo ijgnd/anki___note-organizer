@@ -11,10 +11,10 @@ License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.
 from pprint import pprint as pp
 
 from anki.errors import AnkiError
+from anki.utils import intTime, ids2str
 
 from aqt import mw
 from aqt.utils import tooltip
-from anki.utils import intTime, ids2str
 
 from .config import mpp, gc
 from .no_consts import *
