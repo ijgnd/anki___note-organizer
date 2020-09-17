@@ -11,7 +11,7 @@ License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.
 from pprint import pprint as pp
 
 from anki.errors import AnkiError
-from anki.utils import intTime, ids2str
+from anki.utils import guid64, intTime, ids2str, pointVersion
 
 from aqt import mw
 from aqt.utils import tooltip
@@ -140,7 +140,10 @@ class Rearranger:
                 nnid = int(data[0])
                 if not nnid or not self.noteExists(nnid):
                     continue
-                self.removeNote(nnid)
+                if pointVersion() < 28:
+                    self.mw.col.remNotes([nnid])
+                else:  # not needed because internally remove_notes calls remNotes (at the moment)
+                    self.mw.col.remove_notes([nnid])
                 deleted.append(nnid)
                 continue
             elif action.startswith((NEW_NOTE, DUPE_NOTE)):
@@ -237,9 +240,11 @@ class Rearranger:
             new_note[gc("BACKUP_FIELD")] = ""
         
         # Refresh note and add to database
-        new_note.flush()
-        self.mw.col.addNote(new_note)
-
+        if pointVersion() < 28:
+            new_note.flush()
+            self.mw.col.addNote(new_note)
+        else:  # 2.1.28+
+            mw.col.add_note(new_note, source_did)
         # Copy over scheduling from old cards for dupes
         if sched:
             scards = sourceNote.cards()
@@ -328,10 +333,6 @@ class Rearranger:
             o.type, o.queue, o.due, o.ivl,
             o.factor, o.reps, o.lapses, o.left, c.id)
 
-    
-    def removeNote(self, nid):
-        self.mw.col.remNotes([nid])
-
 
     def noteExists(self, nid):
         """Checks the database to see whether the nid is actually assigned"""
@@ -377,13 +378,23 @@ class Rearranger:
         """
         note = self.mw.col.getNote(old_nid)
         cards = note.cards()
-        note.id = new_nid
-        note.flush()
-        for card in cards:
-            card.nid = new_nid
-            card.flush()
-        self.mw.col._remNotes([old_nid])   
-        return new_nid
+        if pointVersion() < 28:
+            note.id = new_nid
+            note.flush()
+            for card in cards:
+                card.nid = new_nid
+                card.flush()
+            self.mw.col._remNotes([old_nid])
+            return new_nid
+        else:  # 2.1.28+
+            note.id = 0
+            note.guid = guid64()
+            mw.col.add_note(note, 0)
+            mw.col.db.execute(f"DELETE FROM cards WHERE nid = {note.id}")  # needed?
+            mw.col.db.execute(f"update notes set id={new_nid} WHERE id = {note.id}")
+            mw.col.db.execute(f"update cards set nid={new_nid} WHERE nid = {old_nid}")
+            mw.col.remove_notes([old_nid])
+            return new_nid
 
 
     def setNidFields(self, nid, onid, idnote=False):
