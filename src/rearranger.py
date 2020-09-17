@@ -375,10 +375,10 @@ class Rearranger:
             c.col._remNotes([old_nid])
         So Arthur just adds "col._remNotes([old_nid])"
         """
-        n = self.mw.col.getNote(old_nid)
-        cards = n.cards()
-        n.id = new_nid
-        n.flush()
+        note = self.mw.col.getNote(old_nid)
+        cards = note.cards()
+        note.id = new_nid
+        note.flush()
         for card in cards:
             card.nid = new_nid
             card.flush()
