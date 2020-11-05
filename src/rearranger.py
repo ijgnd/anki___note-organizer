@@ -394,8 +394,15 @@ class Rearranger:
             mw.col.db.execute(f"update notes set id={new_nid} WHERE id = {note.id}")
             mw.col.db.execute(f"update cards set nid={new_nid} WHERE nid = {old_nid}")
             mw.col.remove_notes([old_nid])
-            return new_nid
 
+            # Mark notes and cards as modified and set for sync - copied from "Duplicate and reorder"
+            note = mw.col.getNote(new_nid)
+            note.usn = mw.col.usn()
+            for card in note.cards():
+                card.usn = mw.col.usn()
+                card.flush()
+            note.flush()
+            return new_nid
 
     def setNidFields(self, nid, onid, idnote=False):
         """Store original NID in a predefined field (if available)"""
