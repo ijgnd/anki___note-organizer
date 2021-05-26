@@ -15,6 +15,7 @@ from aqt.browser import Browser
 from aqt.utils import askUser
 
 from anki.hooks import addHook, wrap
+from anki.utils import pointVersion
 
 from .dialog import Organizer
 from .rearranger import Rearranger
@@ -85,7 +86,10 @@ addHook("browser.setupMenus", setupMenu)
 Browser.onReorganize = onReorganize
 Browser.organizer = None
 
+if pointVersion() < 45:
 Browser.onRowChanged = wrap(Browser._onRowChanged, onBrowserRowChanged, "after")
+else:
+    Browser.onRowChanged = wrap(Browser.onRowChanged, onBrowserRowChanged, "after")
 # TODO gui_hooks.browser_did_change_row(self)
 Browser.closeEvent = wrap(Browser.closeEvent, onBrowserClose, "before")
 Browser.deleteNotes = wrap(Browser.deleteNotes, onBrowserNoteDeleted, "around")
