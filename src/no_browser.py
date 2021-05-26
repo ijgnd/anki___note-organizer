@@ -58,7 +58,7 @@ def onReorganize(self):
     if sel and len(sel) > 1:
         count = len(sel)
     else:
-        count = len(self.model.cards)
+        count = len(self.model.cards if pointVersion() < 45 else self.table._model._items)
     if gc("general: Card Count Warning") and count > gc("general: Card Count Warning"):
         ret = askUser("Are you sure you want to invoke Note Organizer "
             "on {} cards? This might take a while".format(count),
@@ -87,7 +87,7 @@ Browser.onReorganize = onReorganize
 Browser.organizer = None
 
 if pointVersion() < 45:
-Browser.onRowChanged = wrap(Browser._onRowChanged, onBrowserRowChanged, "after")
+    Browser.onRowChanged = wrap(Browser._onRowChanged, onBrowserRowChanged, "after")
 else:
     Browser.onRowChanged = wrap(Browser.onRowChanged, onBrowserRowChanged, "after")
 # TODO gui_hooks.browser_did_change_row(self)
