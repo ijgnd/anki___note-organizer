@@ -95,8 +95,4 @@ Small bug fixes and some reorganization/renaming © 2020 ijgnd
 
 This add-on was developed on a commission by a fellow Anki user who would like to remain anonymous. All credit for the original idea goes to them.
 
-Glutanimate's version from 2017 includes this line: "I'm always happy for new add-on commissions. If you'd like to hire my services to work an add-on or new feature, please feel free to reach out to me through ankiglutanimate [αt] gmail . com." Since then he has stated a [patreon](https://www.patreon.com/glutanimate) so that he probably doesn't have time for new add-on commissions. There are multiple great supporters-only add-ons on his patreon.
-
-But in 2020-02 you can hire Arthur Milchior(*arthur@milchior.fr*) who has created about [70 add-ons](https://ankiweb.net/shared/byauthor/354407385) and also has done some paid work.
-
 Licensed under the [GNU AGPL v3](http://www.gnu.de/documents/gpl-3.0.en.html). 
