@@ -1,6 +1,8 @@
 ## Ijgnd's Fork of Arthur's Fork of Glutanimate's Note Organizer Add-on for Anki
 
-This add-on is not well tested. It's alpha quality software. Only use it if you have backups and know how to restore them. Only use if after testing it on a disposable collection. This add-on makes far-reaching changes to your database. If there's a bug all your notes might be damaged.
+**This version does not work with Anki 2.1.45 or later.**
+
+This add-on is not well tested. It's alpha quality software. Only use it if you have backups and know how to restore them. Only use if after testing it on a disposable collection. This add-on makes far-reaching changes to your database. If there's a bug all your notes might be damaged. Over the years a few people have said that they sometimes use this add-on.
 
 USE THIS AT YOUR OWN RISK!!
 
