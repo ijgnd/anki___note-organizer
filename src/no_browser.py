@@ -23,14 +23,14 @@ from .config import gc
 from .no_consts import *
 
    
-def onBrowserRowChanged(self, current, previous):
+def onBrowserRowChanged(self, current, previous):  # self is browser
     """Sync row position to Organizer"""
     if not self.organizer:
         return
     self.organizer.focusNid(self.card.nid)
 
 
-def onBrowserNoteDeleted(self, _old):
+def onBrowserNoteDeleted(self, _old):  # self is browser
     """Synchronize note deletion to Organizer"""
     if not self.organizer:
         return _old(self)
@@ -42,19 +42,19 @@ def onBrowserNoteDeleted(self, _old):
     return ret
 
 
-def onBrowserClose(self, evt):
+def onBrowserClose(self, evt):  # self is browser
     """Close with browser"""
     if self.organizer:
         self.organizer.close()
 
 
-def onReorganize(self):
+def onReorganize(self):  # self is browser
     """Invoke Organizer window"""
     if self.organizer:
         self.organizer.show()
         return
     
-    sel = self.selectedCards()
+    sel = self.selectedCards()  # 50 is selected_cards
     if sel and len(sel) > 1:
         count = len(sel)
     else:
@@ -92,4 +92,4 @@ else:
     Browser.onRowChanged = wrap(Browser.onRowChanged, onBrowserRowChanged, "after")
 # TODO gui_hooks.browser_did_change_row(self)
 Browser.closeEvent = wrap(Browser.closeEvent, onBrowserClose, "before")
-Browser.deleteNotes = wrap(Browser.deleteNotes, onBrowserNoteDeleted, "around")
+Browser.deleteNotes = wrap(Browser.deleteNotes, onBrowserNoteDeleted, "around")  # in 50 it's delete_selected_notes
