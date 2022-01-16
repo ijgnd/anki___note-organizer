@@ -29,7 +29,7 @@ else:
 
 from .custom_table_widget import NoteTable
 from .rearranger import Rearranger
-from .config import gc
+from .config import anki_21_version, gc
 from .no_consts import *
 
 
@@ -149,6 +149,13 @@ class Organizer(QDialog):
 
 
     def fillTable(self):
+        if anki_21_version <= 44:
+            self.fillTable_old()
+        else:
+            self.fillTable_new()
+
+
+    def fillTable_old(self):
         """Fill table rows with data"""
         b = self.browser
         m = b.model
@@ -220,6 +227,9 @@ class Organizer(QDialog):
 
         self.setWindowTitle("Reorganize Notes ({} notes shown)".format(row_count))
 
+
+    def fillTable_new(self):
+       pass
 
     def onCellChanged(self, row, col):
         """Update datetime display when (0,0) changed"""
