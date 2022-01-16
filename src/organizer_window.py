@@ -192,6 +192,14 @@ class Organizer(QDialog):
             nids_processed.append(nid)
             row_contents_list_of_lists.append(contents_one_rowdata_row)
         row_contents_list_of_lists.sort()
+        """
+        row_contents_list_of_lists could look like this if two notes are selcted in the browser table
+        if in the browser there are three columns shown
+            [
+                [nid1, content_cell_1, content_cell_2, content_cell_3],
+                [nid2, content_cell_1, content_cell_2, content_cell_3],
+            ]
+        """
         self.oldnids = [i[0] for i in row_contents_list_of_lists]
 
         # end = timer()
