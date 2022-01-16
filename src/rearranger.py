@@ -3,7 +3,7 @@ This file is part of the Note Organizer add-on for Anki
 
 Copyright: (c) 2017 Glutanimate
            (c) 2020 Arthur Milchior (GPL code from https://github.com/hssm/advanced-browser/commit/7fba8f30f0ebd12b2f458f8a56ec7c6c068ddf24)
-           (c) 2020 ijgnd
+           (c) 2020- ijgnd
 
 License: GNU AGPL, version 3 or later; https://www.gnu.org/licenses/agpl-3.0.en.html
 """
