@@ -17,7 +17,7 @@ from aqt.utils import askUser
 from anki.hooks import addHook, wrap
 from anki.utils import pointVersion
 
-from .dialog import Organizer
+from .organizer_window import Organizer
 from .rearranger import Rearranger
 from .config import gc
 from .no_consts import *
