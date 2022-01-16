@@ -160,7 +160,7 @@ class Organizer(QDialog):
         browser = self.browser
         b_t_model = browser.model
 
-        data = []
+        row_contents_list_of_lists = []
         b_t_m_active_cols = b_t_model.activeCols
 
         # either get selected cards or entire view
@@ -185,14 +185,14 @@ class Organizer(QDialog):
             nid = card.note().id
             if nid in nids_processed:
                 continue
-            data_row = [str(nid)]
+            contents_one_row = [str(nid)]
             for col in range(len(b_t_m_active_cols)):
                 index = b_t_model.index(row, col)
-                data_row.append(b_t_model.data(index, Qt.ItemDataRole.DisplayRole))
+                contents_one_row.append(b_t_model.data(index, Qt.ItemDataRole.DisplayRole))
             nids_processed.append(nid)
-            data.append(data_row)
-        data.sort()
-        self.oldnids = [i[0] for i in data]
+            row_contents_list_of_lists.append(contents_one_rowdata_row)
+        row_contents_list_of_lists.sort()
+        self.oldnids = [i[0] for i in row_contents_list_of_lists]
 
         # end = timer()
         # print("getdata", end - start) 
@@ -203,12 +203,12 @@ class Organizer(QDialog):
         # after uninstall of advanced browser there are might be unknown columns in b_t_m_active_cols like 
         # my "overdueivl"
         headers = ["Note ID"] + [coldict.get(key, "Add-on") for key in b_t_m_active_cols]
-        row_count = len(data)
+        row_count = len(row_contents_list_of_lists)
         self.table.setRowCount(row_count)
         self.table.setColumnCount(len(headers))
         self.table.setHorizontalHeaderLabels(headers)
 
-        for row, columns in enumerate(data):
+        for row, columns in enumerate(row_contents_list_of_lists):
             for col, value in enumerate(columns):
                 if isinstance(value, int) and value > 2147483647:
                     value = str(value)
