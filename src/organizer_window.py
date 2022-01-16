@@ -22,7 +22,11 @@ from aqt.utils import (
     tooltip
 )
 
-from .forms import organizer
+if qtmajor == 5:
+    from .forms5 import organizer  # type: ignore  # noqa
+else:
+    from .forms6 import organizer  # type: ignore  # noqa
+
 from .custom_table_widget import NoteTable
 from .rearranger import Rearranger
 from .config import gc
