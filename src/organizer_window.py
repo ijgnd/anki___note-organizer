@@ -157,41 +157,39 @@ class Organizer(QDialog):
 
     def fillTable_old(self):
         """Fill table rows with data"""
-        b = self.browser
-        m = b.model
-        t = self.table
+        browser = self.browser
+        b_t_model = browser.model
 
         data = []
         notes = []
         nids = []
-        mcol = m.activeCols
-        mcolcnt = len(m.activeCols)
+        b_t_m_active_cols = b_t_model.activeCols
 
         # either get selected cards or entire view
-        sel = b.selectedCards()
-        if sel and len(sel) > 1:
+        sel_cids_in_b = browser.selectedCards()
+        if sel_cids_in_b and len(sel_cids_in_b) > 1:
             # need to map nids to actually selected row indexes
-            idxs = b.form.tableView.selectionModel().selectedRows()
+            idxs = browser.form.tableView.selectionModel().selectedRows()
         else:
-            sel = m.cards
+            sel_cids_in_b = b_t_model.cards
             idxs = None
 
         # eliminate duplicates, get data, and sort it by nid
         # start = timer()
-        for row, cid in enumerate(sel):
+        for row, cid in enumerate(sel_cids_in_b):
             if idxs:
                 row = idxs[row].row()
-            c = m.cardObjs.get(cid, None)
-            if not c:
-                c = m.col.getCard(cid)
-                m.cardObjs[cid] = c
-            nid = c.note().id
+            card = b_t_model.cardObjs.get(cid, None)
+            if not card:
+                card = b_t_model.col.getCard(cid)
+                b_t_model.cardObjs[cid] = card
+            nid = card.note().id
             if nid in nids:
                 continue
             data_row = [str(nid)]
-            for col in range(mcolcnt):
-                index = m.index(row, col)
-                data_row.append(m.data(index, Qt.ItemDataRole.DisplayRole))
+            for col in range(len(b_t_m_active_cols)):
+                index = b_t_model.index(row, col)
+                data_row.append(b_t_model.data(index, Qt.ItemDataRole.DisplayRole))
             nids.append(nid)
             data.append(data_row)
         data.sort()
@@ -202,25 +200,25 @@ class Organizer(QDialog):
 
         # set table data
         # start = timer()
-        coldict = dict(b.columns)
-        # after uninstall of advanced browser there are might be unknown columns in mcol like 
+        coldict = dict(browser.columns)
+        # after uninstall of advanced browser there are might be unknown columns in b_t_m_active_cols like 
         # my "overdueivl"
-        headers = ["Note ID"] + [coldict.get(key, "Add-on") for key in mcol]
+        headers = ["Note ID"] + [coldict.get(key, "Add-on") for key in b_t_m_active_cols]
         row_count = len(data)
-        t.setRowCount(row_count)
-        t.setColumnCount(len(headers))
-        t.setHorizontalHeaderLabels(headers)
+        self.table.setRowCount(row_count)
+        self.table.setColumnCount(len(headers))
+        self.table.setHorizontalHeaderLabels(headers)
 
         for row, columns in enumerate(data):
             for col, value in enumerate(columns):
                 if isinstance(value, int) and value > 2147483647:
                     value = str(value)
                 item = QTableWidgetItem(value)
-                f = QFont()
-                # f.setFamily(b.mw.fontFamily)
-                #f.setPixelSize(b.mw.fontHeight)
-                item.setFont(f)
-                t.setItem(row,col,item)
+                font = QFont()
+                # f.setFamily(browser.mw.fontFamily)
+                #f.setPixelSize(browser.mw.fontHeight)
+                item.setFont(font)
+                self.table.setItem(row,col,item)
 
         # end = timer()
         # print("setdata", end - start)
