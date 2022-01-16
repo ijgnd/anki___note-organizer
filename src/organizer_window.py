@@ -150,12 +150,32 @@ class Organizer(QDialog):
 
     def fillTable(self):
         if anki_21_version <= 44:
-            self.fillTable_old()
+            headers, row_contents_list_of_lists = self.gather_contents_old()
         else:
-            self.fillTable_new()
+            headers, row_contents_list_of_lists = self.gather_contents_new()
+
+        self.oldnids = [i[0] for i in row_contents_list_of_lists]
+        
+        row_count = len(row_contents_list_of_lists)
+        self.table.setRowCount(row_count)
+        self.table.setColumnCount(len(headers))
+        self.table.setHorizontalHeaderLabels(headers)
+
+        for row, columns in enumerate(row_contents_list_of_lists):
+            for col, value in enumerate(columns):
+                if isinstance(value, int) and value > 2147483647:
+                    value = str(value)
+                item = QTableWidgetItem(value)
+                font = QFont()
+                # f.setFamily(browser.mw.fontFamily)
+                #f.setPixelSize(browser.mw.fontHeight)
+                item.setFont(font)
+                self.table.setItem(row,col,item)
+
+        self.setWindowTitle("Reorganize Notes ({} notes shown)".format(row_count))
 
 
-    def fillTable_old(self):
+    def gather_contents_old(self):
         """Fill table rows with data"""
         browser = self.browser
         b_t_model = browser.model
@@ -173,7 +193,6 @@ class Organizer(QDialog):
             idxs = None
 
         # eliminate duplicates, get data, and sort it by nid
-        # start = timer()
         nids_processed = []
         for row, cid in enumerate(sel_cids_in_b):
             if idxs:
@@ -190,7 +209,7 @@ class Organizer(QDialog):
                 index = b_t_model.index(row, col)
                 contents_one_row.append(b_t_model.data(index, Qt.ItemDataRole.DisplayRole))
             nids_processed.append(nid)
-            row_contents_list_of_lists.append(contents_one_rowdata_row)
+            row_contents_list_of_lists.append(contents_one_row)
         row_contents_list_of_lists.sort()
         """
         row_contents_list_of_lists could look like this if two notes are selcted in the browser table
@@ -200,40 +219,16 @@ class Organizer(QDialog):
                 [nid2, content_cell_1, content_cell_2, content_cell_3],
             ]
         """
-        self.oldnids = [i[0] for i in row_contents_list_of_lists]
 
-        # end = timer()
-        # print("getdata", end - start) 
-
-        # set table data
-        # start = timer()
-        coldict = dict(browser.columns)
         # after uninstall of advanced browser there are might be unknown columns in b_t_m_active_cols like 
         # my "overdueivl"
+        coldict = dict(browser.columns)
         headers = ["Note ID"] + [coldict.get(key, "Add-on") for key in b_t_m_active_cols]
-        row_count = len(row_contents_list_of_lists)
-        self.table.setRowCount(row_count)
-        self.table.setColumnCount(len(headers))
-        self.table.setHorizontalHeaderLabels(headers)
 
-        for row, columns in enumerate(row_contents_list_of_lists):
-            for col, value in enumerate(columns):
-                if isinstance(value, int) and value > 2147483647:
-                    value = str(value)
-                item = QTableWidgetItem(value)
-                font = QFont()
-                # f.setFamily(browser.mw.fontFamily)
-                #f.setPixelSize(browser.mw.fontHeight)
-                item.setFont(font)
-                self.table.setItem(row,col,item)
-
-        # end = timer()
-        # print("setdata", end - start)
-
-        self.setWindowTitle("Reorganize Notes ({} notes shown)".format(row_count))
+        return headers, row_contents_list_of_lists
 
 
-    def fillTable_new(self):
+    def gather_contents_new(self):
        pass
 
     def onCellChanged(self, row, col):
