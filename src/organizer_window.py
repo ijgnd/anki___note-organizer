@@ -229,7 +229,30 @@ class Organizer(QDialog):
 
 
     def gather_contents_new(self):
-       pass
+        """Fill table rows with data"""
+        browser = self.browser
+
+        row_contents_list_of_lists = []
+        # get contents of selected rows from browser table
+        for qmi in browser.table._selected():  # qmi = QModelIndex
+            # row_idx = qmi.row()
+            
+            # nid = browser.table._model.get_note_id(qmi)  # get_note_id is not in .45
+            nid = browser.table._model.get_note_ids([qmi])[0]  # get_note_id is not in .45
+            contents_one_row = [str(nid)]
+            row = browser.table._model.get_row(qmi)
+            for cell in row.cells:
+                contents_one_row.append(cell.text)
+            row_contents_list_of_lists.append(contents_one_row)
+        # pp(row_contents_list_of_lists, width=130)
+
+        # headers = browser.table._model._state.active_columns  # not translated
+        headers = []
+        for i in range(browser.table._model.len_columns()):
+            headers.append(browser.table._model.headerData(i, Qt.Horizontal, Qt.DisplayRole))
+
+        return headers, row_contents_list_of_lists
+
 
     def onCellChanged(self, row, col):
         """Update datetime display when (0,0) changed"""
