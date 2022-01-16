@@ -161,8 +161,6 @@ class Organizer(QDialog):
         b_t_model = browser.model
 
         data = []
-        notes = []
-        nids = []
         b_t_m_active_cols = b_t_model.activeCols
 
         # either get selected cards or entire view
@@ -176,6 +174,7 @@ class Organizer(QDialog):
 
         # eliminate duplicates, get data, and sort it by nid
         # start = timer()
+        nids_processed = []
         for row, cid in enumerate(sel_cids_in_b):
             if idxs:
                 row = idxs[row].row()
@@ -184,13 +183,13 @@ class Organizer(QDialog):
                 card = b_t_model.col.getCard(cid)
                 b_t_model.cardObjs[cid] = card
             nid = card.note().id
-            if nid in nids:
+            if nid in nids_processed:
                 continue
             data_row = [str(nid)]
             for col in range(len(b_t_m_active_cols)):
                 index = b_t_model.index(row, col)
                 data_row.append(b_t_model.data(index, Qt.ItemDataRole.DisplayRole))
-            nids.append(nid)
+            nids_processed.append(nid)
             data.append(data_row)
         data.sort()
         self.oldnids = [i[0] for i in data]
