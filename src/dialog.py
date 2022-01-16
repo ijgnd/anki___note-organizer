@@ -71,7 +71,7 @@ class Organizer(QDialog):
         self.dialog.buttonBox.rejected.connect(self.onReject)
         self.dialog.buttonBox.accepted.connect(self.onAccept)
 
-        self.table.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.table.customContextMenuRequested.connect(self.onTableContext)
 
         s = QShortcut(QKeySequence(gc("shortcut: Insert")),
@@ -180,7 +180,7 @@ class Organizer(QDialog):
             data_row = [str(nid)]
             for col in range(mcolcnt):
                 index = m.index(row, col)
-                data_row.append(m.data(index, Qt.DisplayRole))
+                data_row.append(m.data(index, Qt.ItemDataRole.DisplayRole))
             nids.append(nid)
             data.append(data_row)
         data.sort()
@@ -219,7 +219,7 @@ class Organizer(QDialog):
 
     def onCellChanged(self, row, col):
         """Update datetime display when (0,0) changed"""
-        if row == col == 0 and not (self.mw.app.keyboardModifiers() & Qt.ShiftModifier):
+        if row == col == 0 and not (self.mw.app.keyboardModifiers() & Qt.KeyboardModifier.ShiftModifier):
             self.updateDate()
 
 
@@ -293,7 +293,7 @@ class Organizer(QDialog):
         font = item.font()
         font.setBold(True)
         item.setFont(font)
-        item.setForeground(Qt.darkGreen)
+        item.setForeground(Qt.GlobalColor.darkGreen)
         self.table.setItem(row, 0, item)
         self.modified = True
 
@@ -319,7 +319,7 @@ class Organizer(QDialog):
                 font = dupe.font()
                 font.setBold(True)
                 dupe.setFont(font)
-                dupe.setForeground(Qt.darkBlue)
+                dupe.setForeground(Qt.GlobalColor.darkBlue)
             else:
                 dupe = QTableWidgetItem(self.table.item(row, col))
             self.table.setItem(new_row, col, dupe)
@@ -355,7 +355,7 @@ class Organizer(QDialog):
                 font = item.font()
                 font.setBold(True)
                 item.setFont(font)
-                item.setForeground(Qt.darkRed)
+                item.setForeground(Qt.GlobalColor.darkRed)
         for row in to_remove[::-1]: # in reverse to avoid updating idxs
             self.table.removeRow(row)
         self.modified = True
@@ -434,7 +434,7 @@ class Organizer(QDialog):
     def onRowChanged(self, current, previous):
         """Sync row change to Browser"""
         mods = QApplication.keyboardModifiers()
-        if mods & (Qt.ShiftModifier | Qt.ControlModifier):
+        if mods & (Qt.KeyboardModifier.ShiftModifier | Qt.KeyboardModifier.ControlModifier):
             return # don't try to focus when multiple items are selected
         rows = self.table.getSelectedRows()
         if not rows:
@@ -457,7 +457,7 @@ class Organizer(QDialog):
         """Find and delete row by note ID"""
         for nid in nids:
             nid = str(nid)
-            cells = self.table.findItems(nid, Qt.MatchEndsWith)
+            cells = self.table.findItems(nid, Qt.MatchFlag.MatchEndsWith)
             if cells:
                 row = cells[0].row()
                 self.table.removeRow(row)
@@ -466,7 +466,7 @@ class Organizer(QDialog):
     def focusNid(self, nid):
         """Find and select row by note ID"""
         nid = str(nid)
-        cells = self.table.findItems(nid, Qt.MatchEndsWith)
+        cells = self.table.findItems(nid, Qt.MatchFlag.MatchEndsWith)
         if cells:
             self.table.setCurrentItem(cells[0])
 

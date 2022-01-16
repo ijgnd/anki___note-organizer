@@ -32,7 +32,7 @@ class NoteTable(QTableWidget):
 
 
     def dropEvent(self, event):
-        if event.source() == self and (event.dropAction() == Qt.MoveAction 
+        if event.source() == self and (event.dropAction() == Qt.DropAction.MoveAction 
                         or self.dragDropMode() == QAbstractItemView.InternalMove):
             success, row, col, topIndex = self.dropOn(event)
             if success:             
@@ -87,11 +87,11 @@ class NoteTable(QTableWidget):
         dropAction = event.dropAction()
 
         if self.dragDropMode() == QAbstractItemView.InternalMove:
-            dropAction = Qt.MoveAction
+            dropAction = Qt.DropAction.MoveAction
 
         if (event.source() == self and 
-                event.possibleActions() & Qt.MoveAction 
-                and dropAction == Qt.MoveAction):
+                event.possibleActions() & Qt.DropAction.MoveAction 
+                and dropAction == Qt.DropAction.MoveAction):
             selectedIndexes = self.selectedIndexes()
             child = index
             while child.isValid() and child != self.rootIndex():
@@ -143,7 +143,7 @@ class NoteTable(QTableWidget):
         elif rect.contains(pos, True):
             r = QAbstractItemView.OnItem
 
-        if r == QAbstractItemView.OnItem and not (self.model().flags(index) & Qt.ItemIsDropEnabled):
+        if r == QAbstractItemView.OnItem and not (self.model().flags(index) & Qt.ItemFlag.ItemIsDropEnabled):
             r = QAbstractItemView.AboveItem if pos.y() < rect.center().y() else QAbstractItemView.BelowItem
 
         return r
