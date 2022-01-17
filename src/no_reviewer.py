@@ -12,7 +12,7 @@ from anki.hooks import addHook
 import aqt
 from aqt import mw
 
-from .config import gc
+from .config import anki_21_version, gc
 from .no_consts import *
 from .rearranger import Rearranger
 
@@ -101,7 +101,10 @@ def onReviewerOrgMenu(command, offset):
     if gc("reviewer: Open Browser"):
         browser = aqt.dialogs.open("Browser", mw)
         browser.form.searchEdit.lineEdit().setText(search)
-        browser._onSearchActivated()
+        if anki_21_version <= 44:
+            browser._onSearchActivated()
+        else:
+            browser.onSearchActivated()
         rearranger.selectNotes(browser, res)
 
 if gc("reviewer: Context Menu"):

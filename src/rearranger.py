@@ -16,7 +16,7 @@ from anki.utils import guid64, intTime, ids2str, pointVersion
 from aqt import mw
 from aqt.utils import tooltip
 
-from .config import mpp, gc
+from .config import anki_21_version, gc, mpp
 from .no_consts import *
 from .helpers import fields_to_fill_for_nonempty_front_template
 
@@ -181,22 +181,46 @@ class Rearranger:
         sourceNote = self.mw.col.getNote(neighbNid)
         
         if not self.card:   # self.card only if called from the reviewer - so this condition is True if called from the browser
-            sourceCids = self.mw.col.db.list(
-                    "select id from cards where nid = ? order by ord", neighbNid)
-            try:
-                visible_source_cid = sourceCids[0]
-            except IndexError:
-                # invalid state: note has no cards
-                return None
-            
-            # try to use visible card if available
-            if self.browser:
-                for cid in sourceCids:
-                    if cid in self.browser.model.cards:
-                        visible_source_cid = cid
-                        break
-            
-            source_card = self.mw.col.getCard(visible_source_cid)
+            if anki_21_version <= 44:
+                sourceCids = self.mw.col.db.list(
+                        "select id from cards where nid = ? order by ord", neighbNid)
+                try:
+                    visible_source_cid = sourceCids[0]
+                except IndexError:
+                    # invalid state: note has no cards
+                    return None
+                
+                # try to use visible card if available
+                if self.browser:
+                    for cid in sourceCids:
+                        if cid in self.browser.model.cards:
+                            visible_source_cid = cid
+                            break
+                source_card = self.mw.col.getCard(visible_source_cid)
+            else:
+                #cids_in_browser = self.browser.table._model.get_card_ids([self.browser.table._model.len_rows()])
+                # self.browser.table._model._items all nids or cids
+                if self.browser.table.is_notes_mode():
+                    source_card = sourceNote.cards()[0]
+                    
+                else:  # really useful?
+                    all_cids_in_browser = self.browser.table._model._items
+
+                    note = self.mw.col.get_note(neighbNid)
+                    sourceCids = note.card_ids()
+                    try:
+                        visible_source_cid = sourceCids[0]
+                    except IndexError:
+                        # invalid state: note has no cards
+                        return None
+                    
+                    # try to use visible card if available
+                    if self.browser:
+                        for cid in sourceCids:
+                            if cid in all_cids_in_browser:
+                                visible_source_cid = cid
+                                break
+                    source_card = self.mw.col.getCard(visible_source_cid)
         else:
             source_card = self.card
         
@@ -425,11 +449,21 @@ class Rearranger:
 
     def selectNotes(self, browser, nids):
         """Select browser entries by note id"""
-        browser.form.tableView.selectionModel().clear()
-        cids = []
-        for nid in nids:
-            nid = self.nid_map.get(nid, nid)
-            cids += self.mw.col.db.list(
-                "select id from cards where nid = ? order by ord", nid)
-        browser.model.selectedCards = {cid: True for cid in cids}
-        browser.model.restoreSelection()
+        if anki_21_version <= 44:
+            browser.form.tableView.selectionModel().clear()
+            cids = []
+            for nid in nids:
+                nid = self.nid_map.get(nid, nid)
+                cids += self.mw.col.db.list(
+                    "select id from cards where nid = ? order by ord", nid)
+            browser.model.selectedCards = {cid: True for cid in cids}
+            browser.model.restoreSelection()
+        else:
+            # adopted from DNR
+            if browser.table.is_notes_mode():
+                browser.search()
+                rows_to_reselect = browser.table._model.get_item_rows(nids)
+                browser.table.clear_selection()
+                browser.table._select_rows(rows_to_reselect)
+
+
