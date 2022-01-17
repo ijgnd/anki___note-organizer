@@ -19,7 +19,7 @@ from anki.utils import pointVersion
 
 from .organizer_window import Organizer
 from .rearranger import Rearranger
-from .config import gc
+from .config import anki_21_version, gc
 from .no_consts import *
 
    
@@ -27,7 +27,12 @@ def onBrowserRowChanged(self, current, previous):  # self is browser
     """Sync row position to Organizer"""
     if not self.organizer:
         return
-    self.organizer.focusNid(self.card.nid)
+    if anki_21_version <= 44:
+        self.organizer.focusNid(self.card.nid)
+    else:
+        nids_in_browser = self.selected_notes()
+        if nids_in_browser:
+            self.organizer.focusNid(nids_in_browser[0])
 
 
 def onBrowserNoteDeleted(self, _old):  # self is browser

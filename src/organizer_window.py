@@ -479,15 +479,35 @@ class Organizer(QDialog):
         item = self.table.item(rows[0], 0)  # PyQt5.QtWidgets.QTableWidgetItem
         if not item:
             return
-        nid = item.text()
-        if ": " in nid: # ignore action markers
-            nid = nid.split(": ")[1]
-        cids = self.mw.col.db.list(
-                "select id from cards where nid = ? order by ord", nid)
-        for cid in cids:
-            if cid in self.browser.model.cards:
-                self.browser.focusCid(cid)
-                break
+        nid_str = item.text()
+        if ": " in nid_str: # ignore action markers
+            nid_str = nid_str.split(": ")[1]
+        
+        try:
+            nid_as_int = int(nid_str)
+        except:
+            print(f"nid_str is: {nid_str}")  #  e.g. "Same note type as previous"
+            return
+
+        if anki_21_version <= 44:
+            cids = self.mw.col.db.list(
+                "select id from cards where nid = ? order by ord", nid_str)
+            # probably should be: 
+            # note = self.browser.col.get_note(nid)
+            # cids = note.card_id()
+            for cid in cids:
+                if cid in self.browser.model.cards:  # card ids in the table
+                    self.browser.focusCid(cid)
+                    break
+        else:
+            note = self.browser.col.get_note(nid_as_int)
+            cids = note.card_ids()
+            rows_to_select = []
+            for cid in cids:
+                row = self.browser.table._model.get_card_row(cid)
+                rows_to_select.append(row)
+            self.browser.table.clear_selection()      
+            self.browser.table._select_rows(rows_to_select)
 
 
     def deleteNids(self, nids):
