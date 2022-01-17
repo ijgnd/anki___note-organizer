@@ -1,14 +1,19 @@
-This add-on allows you to manually decide in which order new notes are seen.
+<b>You should not use this add-on version if you are a regular anki user</b>. In its current form there's a good chance it'll permanently damage your collection (that holds everything you ever created or did in Anki).
 
-<img src="https://github.com/Arthur-Milchior/note-organizer/raw/master/screenshots/organizer1.png">
-<img src="https://github.com/Arthur-Milchior/note-organizer/raw/master/screenshots/organizer2.png">
+The add-on was uploaded so that it's discoverable for people willing to take it over (fork it) or experienced users who want to test it and report bugs etc. I haven't really tested the add-on, especially not on newer Anki versions. Over the years some people told me that they sometimes use and their collection survived it. Use this at your own risk.
 
-To report bug, and for more informations, please go to <a href="https://github.com/Arthur-Milchior/note-organizer" rel="nofollow">https://github.com/Arthur-Milchior/note-organizer</a>
+If you look for something that has a better chance of working maybe have a look at <a href="https://ankiweb.net/shared/info/1114271285" rel="nofollow">Duplicate and Reorder</a> - the version from ankiweb from 2021-11-23 seemed to work well. 
 
-<strong>SUPPORT THIS ADD-ON</strong>
 
-Think about giving a <a href="https://ankiweb.net/shared/review/456070647" rel="nofollow"><img src="http://milchior.fr/rate.svg"> thumbs up</a> and about sharing it.
+This add-on allows to modify the creation time of notes and insert notes with a faked creation time.
 
-<em>If you please</em>: All of our contributions are freely shared with every users. They took a lot of time to create (by Glutanimate) and to maintain (by Arthur Milchior). If you think that they improve your use of Anki, we'd gladly accept a tip:
-Arthur Milchior (Maintener, porting to 2.1): <a href="https://www.patreon.com/ArthurMilchior" rel="nofollow" title="Support me on Patreon 😄"><img src="http://milchior.fr/patreon_button.svg"></a>      <a href="https://ko-fi.com/P5P6WT4A" rel="nofollow" title="Buy me a coffee 😊"><img src="http://milchior.fr/kofi_button.svg"></a> .
-Glutanimate (original code): <a href="https://www.patreon.com/glutanimate" rel="nofollow" title="❤️ Support me on Patreon"><img src="https://glutanimate.com/logos/patreon_button.svg"></a>      <a href="https://ko-fi.com/X8X0L4YV" rel="nofollow" title="❤️ Buy me a coffee"><img src="https://glutanimate.com/logos/kofi_button.svg"></a>      <img src="https://glutanimate.com/logos/thanks.svg">
+The only persistent sorting criterion across reviews in Anki is the note creation time. By modifying this time artificially, the add-on allows you to define a custom note sorting order. This is different from all of the other repositioning tools Anki ships with because they only temporarily affect the order of introduction of new cards. Any changes performed to the positioning of new cards get lost once they enter the learning phase.
+
+
+<img src="https://github.com/ijgnd/note-organizer/raw/master/screenshots/organizer1.png">
+<img src="https://github.com/ijgnd/note-organizer/raw/master/screenshots/organizer2.png">
+
+<b># Credits and License</b>
+- original version for 2.0: *Copyright © 2017 [Aristotelis P.](https://github.com/Glutanimate)*. You can support him [at his patreon](https://www.patreon.com/glutanimate)
+- Updated to anki 2.1 (python 3, qt5) © 2020 [Arthur Milchior](https://github.com/Arthur-Milchior/note-organizer)*
+- Some bug fixes and some reorganization/renaming © 2020- ijgnd

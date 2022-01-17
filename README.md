@@ -1,17 +1,24 @@
 ## Ijgnd's Fork of Arthur's Fork of Glutanimate's Note Organizer Add-on for Anki
 
-**This version does not work with Anki 2.1.45 or later.**
+This add-on is virtually unmaintained. Hopefully someone will fork and maintain it.
 
 This add-on is not well tested. It's alpha quality software. Only use it if you have backups and know how to restore them. Only use if after testing it on a disposable collection. This add-on makes far-reaching changes to your database. If there's a bug all your notes might be damaged. Over the years a few people have said that they sometimes use this add-on.
 
 USE THIS AT YOUR OWN RISK!!
 
 Feedback and bug reports that describe how to produce the problem are very welcome. My goal is to get the code tested and working well so that I can send a pull request that glutanimate can merge and release.
+### alternatives
 
+- [Duplicate and Reorder](https://ankiweb.net/shared/info/1114271285): switches neighboring nids
+- https://gitlab.com/ijgnd/anki-addon-duplicate-and-reorder Fork of prior add-on for 
+2.1.45+ that additoinally allows you directly enter a new nid. Also nids are no 
+longer just switched but a new note that's close to the neighboring nid is used
+- https://github.com/ijgnd/anki-copy-note Arthur's original version allows to duplicate
+notes. This fork also allows to insert virtually empty notes. Also there's an option
+to insert before instead of after the source note.
 
-
-
-
+All these add-ons tend to process fewer notes to get the desired result so if an error
+occurs the consequences are probably more limited.
 ### (mostly the) Original description
 
 Extends Anki's card browser with an easy-to-use dialog that provides the user with a multitude of different ways to organize and restructure their note collection. Actions supported by the add-on include changing the note order, inserting new notes at specific positions, and the ability to duplicate notes alongside their scheduling.
@@ -58,7 +65,7 @@ Gathering all of the required information to display your notes takes time, and 
 
 Contrary to what you might be thinking at this point, setting a custom note sorting order will *not* allow you to go through your regular reviews in a specific order. What it will provide you with, however, is:
 
-- the ability to review cards in a consistent sorting order using *filtered decks* or the [Advanced Previewer add-on](https://ankiweb.net/shared/info/544521385). The Advanced Previewer does not work with Anki 2.1 as of 2020-02-22. But the add-on creator glutanimate has already announced an update.
+- the ability to review cards in a consistent sorting order using *filtered decks* or the [Advanced Previewer add-on](https://ankiweb.net/shared/info/544521385). The Advanced Previewer hasn't been updated to 2.1 as of 2022-01.
 - the ability to freely determine how new cards are introduced in the learning phase
 - the ability to always go back and learn your cards in a specific order when starting from scratch after a longer hiatus
 - the ability to restructure your decks in preparation of sharing them with others
@@ -81,17 +88,22 @@ Both the columns and entries in the note table are fully defined by Anki's card 
 
 While performing your changes in the note organizer, Anki's card browser will follow along and always display the active entry in the note table. This synchronization works both ways and allows you to get a better overview of each note's contents. Synchronization to the previewer window is also supported.
 
-The date and time entry at the bottom left corner allows you to set the creation time for the first note. This can be useful when moving a newly created note to the very top of the list.
+The date and time entry at the bottom left corner allows you to set the creation 
+time for the first note. This can be useful when moving a newly created note to 
+the very top of the list.
 
-Clicking on "OK" will prompt you with a confirmation dialog, listing all of the changes that the add-on will perform. Make sure to always double-check whether all of these are correct. The add-on *does* set a recovery point before performing its changes – which can then be reverted to through Anki's undo feature (<kbd>Ctrl</kbd> + <kbd>Z</kbd>) – but it's better to be safe than sorry.
+Clicking on "OK" will prompt you with a confirmation dialog, listing all of the changes that the add-on will perform. Make sure to always double-check whether 
+all of these are correct. 
 
+The add-on ~~*does*~~ set a recovery point [at least in older Anki versions,
+not tested with versions from the last two years] before performing 
+its changes – which can then be reverted to through Anki's undo feature 
+(<kbd>Ctrl</kbd> + <kbd>Z</kbd>).
 ### Credits and License
 
-*Note Organizer* is *Copyright © 2017 [Aristotelis P.](https://github.com/Glutanimate)*
-
-Updated to anki 2.1 (python 3, qt5) © 2020 [Arthur Milchior](https://github.com/Arthur-Milchior/note-organizer)*
-
-Small bug fixes and some reorganization/renaming © 2020 ijgnd
+- original version for 2.0: *Copyright © 2017 [Aristotelis P.](https://github.com/Glutanimate)*
+- Updated to anki 2.1 (python 3, qt5) © 2020 [Arthur Milchior](https://github.com/Arthur-Milchior/note-organizer)*
+- Some bug fixes and some reorganization/renaming © 2020- ijgnd
 
 This add-on was developed on a commission by a fellow Anki user who would like to remain anonymous. All credit for the original idea goes to them.
 
