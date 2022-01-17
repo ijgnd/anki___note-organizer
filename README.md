@@ -1,4 +1,7 @@
-## Ijgnd's Fork of Arthur's Fork of Glutanimate's Note Organizer Add-on for Anki
+## Ijgnd's Fork (2020-2022) of Arthur's Fork of Glutanimate's Note Organizer Add-on for Anki
+
+- Glutanimate's version from 2017: https://github.com/glutanimate/note-organizer
+- Arthur's version from 2020-01: https://github.com/Arthur-Milchior/note-organizer
 
 This add-on is virtually unmaintained. Hopefully someone will fork and maintain it.
 
